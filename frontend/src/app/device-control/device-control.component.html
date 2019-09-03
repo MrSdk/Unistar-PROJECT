@@ -1,0 +1,42 @@
+<div class="main-content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-10 col-md-10 col-sm-10" style="margin: auto">
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let user of users">
+                        <mat-expansion-panel-header>
+                            <b>{{ user.company }}</b>
+                        </mat-expansion-panel-header>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="">
+                                    <th>
+                                        <i>Device description</i>
+                                    </th>
+                                    <th>
+                                        <i>Action</i>
+                                    </th>
+                                </thead>
+                                <tbody>
+
+                                    <tr *ngFor="let device of user.devices">
+                                        <th>
+                                            {{device.description}}
+                                        </th>
+                                        <td>
+                                            <button *ngIf="!device.status" mat-raised-button color="warn" (click)="updateStatus(user._id,device._id,1)" style="margin: 5px">Block</button>
+                                            <button *ngIf="device.status" mat-raised-button color="primary" (click)="updateStatus(user._id,device._id,0)" style="margin: 5px">UnBlock</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+    </div>
+</div>

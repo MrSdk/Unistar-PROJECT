@@ -1,0 +1,6 @@
+{
+    "env": {
+        "DB_NAME": "unistar",
+        "JWT_KEY": "some_key"
+    }
+}

@@ -1,0 +1,19 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-10 col-sm-10" style="margin: auto">
+                <mat-card>
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="login" #name [value]="login">
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput type="text" placeholder="password" #pass [value]="password">
+                    </mat-form-field>
+
+                    <button mat-raised-button color="primary" (click)="change(name.value,pass.value)">Change</button>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="main-content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <a routerLink="/clients/create" mat-raised-button><b><span style="font-size: 20px">+ Client</span></b></a>
+            </div>
+            <div class="col-md-12">
+                <div class="card card-plain">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title mt-0">All Clients are here</h4>
+                        <p class="card-category"> You can change them</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="">
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Company
+                                    </th>
+                                    <th>
+                                        Information
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let user of users; let i=index">
+                                        <td>
+                                            {{i + 1}}
+                                        </td>
+                                        <td>
+                                            {{ user.name }}
+                                        </td>
+                                        <td>
+                                            {{ user.company }}
+                                        </td>
+                                        <td>
+                                            {{ user.description }}
+                                        </td>
+                                        <td>
+                                            <a style="margin: 5px" routerLink="/clients/edit/{{user._id}}" mat-stroked-button color="primary">Edit</a>
+                                            <button *ngIf="!user.status" mat-stroked-button color="warn" (click)="userStatus(user._id,1)">Block</button>
+                                            <button *ngIf="user.status" mat-stroked-button color="basic" (click)="userStatus(user._id,0)">UnBlock</button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

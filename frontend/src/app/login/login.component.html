@@ -1,0 +1,13 @@
+<div class="wrapper fadeInDown">
+    <div style="padding-top: 20px " id="formContent">
+
+        <form [formGroup]="form" action="" class="form-horizontal">
+
+            <input formControlName="login" type="text" id="login" class="fadeIn second" name="login" placeholder="Login..">
+            <input formControlName="password" type="password" id="password" class="fadeIn third" name="password" placeholder="Password..">
+            <input type="button" (click)="login()" class="fadeIn fourth" style="cursor: pointer" value="Log In">
+        </form>
+
+
+    </div>
+</div>

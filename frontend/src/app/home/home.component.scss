@@ -1,0 +1,75 @@
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#notfound {
+    position: relative;
+    height: 100vh;
+    background-color: #222;
+}
+
+#notfound .notfound {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.notfound {
+    width: 100%;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.notfound .notfound-404 h1 {
+    font-family: 'Josefin Sans', sans-serif;
+    color: #222;
+    font-size: 60px;
+    letter-spacing: 10px;
+    font-weight: 700;
+    text-shadow: 2px 2px 0px #c9c9c9, -2px -2px 0px #c9c9c9;
+}
+
+.notfound .notfound-404 h1>span {
+    text-shadow: 2px 2px 0px #ffab00, -2px -2px 0px #ffab00, 0px 0px 8px #ff8700;
+}
+
+@media only screen and (max-width: 992px) {
+    .notfound .notfound-404 h1 {
+        font-size: 50px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .notfound .notfound-404 h1 {
+        font-size: 40px;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .notfound .notfound-404 h1 {
+        font-size: 30px;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .notfound .notfound-404 h1 {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    .notfound .notfound-404 h1 {
+        font-size: 15px;
+    }
+}

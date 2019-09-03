@@ -1,0 +1,152 @@
+<div *ngIf="!allowToAll">
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-1" style="margin: auto;margin-top: 20%">
+
+                    <mat-spinner></mat-spinner>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main-content">
+    <div class="container-fluid">
+        <div *ngIf="allowToAll" class="row">
+            <div class="col-lg-10 col-md-10 col-sm-10" style="margin: auto">
+                <div class="row" *ngIf="device_has(); else noDevice">
+                    <mat-form-field>
+                        <mat-label>Check interval</mat-label>
+                        <mat-select [(value)]="checkedMinute">
+                            <mat-option *ngFor="let checkMinute of checkMinutes" (click)="checkedSelect()" [value]="checkMinute">
+                                {{ ( checkMinute
+                                <=60 )? (checkMinute + ' minut') : (checkMinute / 60 + ' hour') }} </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="col-md-12" style="margin: 5px">
+
+                        <mat-card>
+
+                            <div *ngIf="allowCanvasDaily">
+                                <h4> Daily</h4>
+
+                                <canvas baseChart [datasets]="(getDevice()).dayInfo" [labels]="barChartLabels_d" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType"></canvas>
+                                <!-- <a href="http://localhost:8080/api/download/daily/{{thisSecretKey}}" mat-raised-button color="primary"> <i class="material-icons text-default">cloud_download</i> <b> Download</b></a> -->
+                            </div>
+                        </mat-card>
+                    </div>
+                    <div class="col-md-12" style="margin: 5px">
+                        <mat-card>
+
+                            <div *ngIf="allowCanvasWeekly">
+                                <h4> Weekly</h4>
+
+                                <canvas baseChart [datasets]="barChartData_w" [labels]="barChartLabels_w" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType"></canvas>
+
+                                <!-- <a href="http://localhost:8080/api/download/weekly/{{thisSecretKey}}" mat-raised-button color="primary"> <i class="material-icons text-default">cloud_download</i> <b> Download</b></a> -->
+                            </div>
+                        </mat-card>
+                    </div>
+                    <mat-form-field>
+                        <mat-label>Check Year</mat-label>
+                        <mat-select [(value)]="checkedYearOfMonth">
+                            <mat-option *ngFor="let checkYear of getFilteredYears()" (click)="checkedMonths()" [value]="checkYears.indexOf(checkYear)">
+                                {{ checkYear }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="margin-left: 10%;">
+                        <mat-label>Check Month</mat-label>
+                        <mat-select [(value)]="checkedMonth">
+                            <mat-option *ngFor="let checkMonth of checkMonths" (click)="checkedMonths()" [value]="checkMonths.indexOf(checkMonth)">
+                                {{ checkMonth }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="col-md-12" style="margin: 5px">
+                        <mat-card>
+
+                            <div *ngIf="allowCanvasMonthly">
+                                <h4> Monthly</h4>
+
+                                <canvas baseChart [datasets]="barChartData_m" [labels]="barChartLabels_m" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"></canvas>
+
+                                <!-- <a href="http://localhost:8080/api/download/monthly/{{thisSecretKey}}" mat-raised-button color="primary"> <i class="material-icons text-default">cloud_download</i> <b> Download</b></a> -->
+                            </div>
+                        </mat-card>
+                    </div>
+                    <mat-form-field>
+                        <mat-label>Check Year</mat-label>
+                        <mat-select [(value)]="checkedYear">
+                            <mat-option *ngFor="let checkYear of checkYears" (click)="checkedYears()" [value]="checkYears.indexOf(checkYear)">
+                                {{ checkYear }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="col-md-12" style="margin: 5px">
+                        <mat-card>
+
+                            <div *ngIf="allowCanvasYearly">
+                                <h4> Annual </h4>
+
+                                <canvas baseChart [datasets]="barChartData_a" [labels]="barChartLabels_a" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"></canvas>
+
+                                <!-- <button mat-raised-button (click)="change()" color="primary"> Change </button> -->
+                            </div>
+                        </mat-card>
+                    </div>
+
+                </div>
+
+            </div>
+            <div *ngIf="!device_has()">
+                <ng-template #noDevice>
+
+                    <div class="alert alert-danger">
+                        <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                              <i class="material-icons">close</i>
+                                          </button>
+                        <span>
+                                              <b> This device isn't exist </b> </span>
+                    </div>
+
+                </ng-template>
+
+            </div>
+            <section class="w-100 " *ngIf="isDevice">
+                <div class="w-50 " style="margin:0 auto;">
+                    <mat-card>
+                        <h3 style="font-family: Goudy Old Style;text-align: center"><b>Receive data at any time interval</b></h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="from">From </label>
+                                <mat-form-field>
+                                    <input #pick1 readonly id="from" matInput [matDatepicker]="picker" placeholder="Choose a date">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="to">To </label>
+                                <mat-form-field>
+                                    <input #pick2 readonly id="to" matInput [matDatepicker]="picker2" placeholder="Choose a date">
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="pick1.value && pick2.value" style="margin: 10px">
+
+                                <button (click)="getFullLink(pick1.value,pick2.value)" mat-raised-button color="primary"> <i class="material-icons text-default">cloud_download </i> <b> Download</b></button>
+
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </section>
+
+
+        </div>
+    </div>
+</div>

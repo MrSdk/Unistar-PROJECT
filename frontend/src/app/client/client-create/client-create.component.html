@@ -1,0 +1,86 @@
+<div class="main-content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="margin: auto">
+
+                <mat-card>
+                    <form [formGroup]="form">
+                        <div class="row" style="padding: 5px">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+
+                                <div>
+                                    <mat-form-field>
+                                        <input matInput formControlName="name" placeholder="Full Name" type="text" required>
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field>
+                                        <input matInput formControlName="login" placeholder="Login" type="text" required>
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field>
+
+                                        <input (input)="verifyPassword()" matInput formControlName="password" placeholder="Password" type="text" required>
+
+                                    </mat-form-field>
+                                    <p style="color: red;font-size: 12px;margin-top: -13px">Min length 8</p>
+                                </div>
+                                <div>
+                                    <mat-form-field>
+                                        <input matInput formControlName="company" placeholder="Company Name" type="text" required>
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field>
+                                        <textarea matInput formControlName="description" placeholder="Client informations" cols="20" rows="4" type="text" required></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="card card-chart col-lg-6 col-md-6 col-sm-6">
+                                <div class="card-header card-header-success">
+                                    <!-- Chart -->
+                                    <h2 style="text-align: center"><b><i> Devices</i></b></h2>
+                                </div>
+                                <div class="card-body">
+                                    <div>
+
+
+                                        <div formArrayName="devices">
+                                            <div *ngFor="let device of devices; let i = index">
+                                                <kbd>{{ 'Device: ' + i }}</kbd>
+                                                <!-- <button mat-stroked-button (click)="removeDevice(device)"> remove</button> -->
+                                                <div style="margin-left: 10px" [formGroupName]="i">
+                                                    <mat-form-field>
+
+                                                        <input matInput formControlName="device_secret" placeholder="Device Secret" type="text">
+                                                    </mat-form-field>
+
+                                                    <mat-form-field>
+                                                        <input matInput formControlName="description" placeholder="Device Information" type="text">
+                                                    </mat-form-field>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="stats">
+
+                                        <button (click)="addDevice( )" mat-raised-button color="warn"> <span style="font-size: 30px">+</span></button>
+                                        <!-- <i class="material-icons">access_time</i> updated 4 minutes ago -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+                        <button [disabled]="form.invalid || !pass " (click)="formClick()" mat-raised-button color="primary"> <i class="material-icons text-default">how_to_reg</i> Save</button>
+                    </form>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div *ngIf="!allowToViewResult">
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-1" style="margin: auto;margin-top: 20%">
+
+                    <mat-spinner></mat-spinner>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="allowToViewResult" class="main-content">
+    <div class="container-fluid">
+        <div *ngIf='!userNotFound' class="row">
+            <div *ngIf="user" class="card card-plain">
+                <div class="card-header card-header-danger">
+                    <div class="card-title mt-0" style="color: #EEEEEE">
+                        <h4>Name: <b style="font-size: 20px">{{ user.name }}</b></h4>
+                        <h4>Company: <b style="font-size: 20px">{{ user.company }}</b></h4>
+
+                        <h4>Description: <b style="font-size: 20px">{{ user.description }}</b></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-10" style="margin: auto">
+                <mat-card>
+                    <div class="table-responsive">
+                        <table *ngIf="user;else noUser" class="table table-hover">
+                            <thead class="">
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let device of user.devices">
+                                    <th>
+                                        {{device.description}}
+                                    </th>
+                                    <td *ngIf="device.status == 0 && allowToViewResult2">
+                                        <a routerLink="/device/{{device.device_secret}}" mat-raised-button color="primary">View Result</a>
+
+                                    </td>
+                                    <td *ngIf="device.status != 0">
+                                        <button [disabled]="true" mat-raised-button color="primary">Blocked</button>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ng-template *ngIf="userNotFound" #noUser>
+
+                            <div class="alert alert-danger">
+                                <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <i class="material-icons">close</i>
+                      </button>
+                                <span>
+                          <b> This Company isn't exist </b> </span>
+                            </div>
+
+                        </ng-template>
+                    </div>
+                </mat-card>
+            </div>
+            <div *ngIf="hasBus" class="col-lg-3 col-md-3 col-sm-3" style="margin:10px auto;">
+                <button mat-stroked-button (click)="viewGps()"><b>View Gps of Buses</b></button>
+            </div>
+        </div>
+    </div>
+</div>
