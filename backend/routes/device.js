@@ -7,11 +7,13 @@ const CheckAuth = require("./../middleware/check-auth")
 
 router.route('/test')
     .get((request, response) => {
+
         console.log(request.body);
         response.status(200).json({ message: "Hello" })
     })
     .post((request, response) => {
-        console.log(request.body);
+        console.log("UUUUUUUUURRRRRRAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
         response.status(200).json(request.body)
     });
 
