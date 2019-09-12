@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
 
   login( ){
     
-    this.authSvc.login(this.form.value).subscribe((result)=>{ 
+    this.authSvc.login(this.form.value).subscribe((result: any)=>{ 
       
       Swal.fire(
         'Welcome',

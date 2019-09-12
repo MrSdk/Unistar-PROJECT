@@ -18,6 +18,10 @@ export class CompanyComponent implements OnInit {
   public allowToViewResult2 = false
   public hasBus = false;
 
+  private subscription1: Subscription;
+  private subscription2: Subscription;
+  private subscription3: Subscription;
+
   constructor(private authSvc: AuthService,private route: ActivatedRoute, private userSvc: UserService,private router: Router, private deviceSvc: DeviceService ) {
     setTimeout(()=>{
       this.allowToViewResult = true;
@@ -34,7 +38,7 @@ export class CompanyComponent implements OnInit {
   } 
   
   verifyUser(){
-    this.authSvc.thisUser().subscribe((result)=>{
+    this.subscription1 = this.authSvc.thisUser().subscribe((result: any)=>{
       console.log(result);
       
       let res = result.result;
@@ -63,8 +67,8 @@ export class CompanyComponent implements OnInit {
   }
 
   getUser(){
-   this.userSvc.get(this.route.snapshot.params.id).subscribe((result)=>{
-        this.user = (result.json()).client 
+    this.subscription2 = this.userSvc.get(this.route.snapshot.params.id).subscribe((result: any)=>{
+        this.user = (result).client 
         this.userNotFound = false;
        
     },(e)=>{
@@ -79,7 +83,7 @@ export class CompanyComponent implements OnInit {
   }
  
   verifyIsGps(){
-    this.deviceSvc.isGps(this.route.snapshot.params.id).subscribe((result)=>{ 
+    this.subscription3 = this.deviceSvc.isGps(this.route.snapshot.params.id).subscribe((result: any)=>{ 
       
       if(result.hasBus){
         this.hasBus = true;
@@ -89,6 +93,12 @@ export class CompanyComponent implements OnInit {
 
   viewGps(){
     this.router.navigate(['/bus/' + this.route.snapshot.params.id])
+  }
+
+  ngOnDestroy(){
+    this.subscription1.unsubscribe()
+    this.subscription2.unsubscribe()
+    this.subscription3.unsubscribe()
   }
 
 }

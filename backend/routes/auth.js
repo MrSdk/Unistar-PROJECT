@@ -82,7 +82,7 @@ router.route("/login")
                 let token = User.generateAuthToken(thisUser)
                 response.status(200).json({ token: token })
             } else {
-                response.status(403).json()
+                response.status(405).json()
             }
         }
         // newUser.save().then(result => {

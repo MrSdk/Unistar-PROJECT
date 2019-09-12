@@ -9,7 +9,9 @@ router.route('/:device_secret/:date1/:date2')
 
         let secret = req.params.device_secret;
         let date1 = new Date(parseInt(req.params.date1));
-        let date2 = new Date(parseInt(req.params.date2)); 
+        let date2 = new Date(parseInt(req.params.date2));
+        date2.setHours("23")
+        date2.setMinutes("59")
 
 
         let data = ""
@@ -19,10 +21,10 @@ router.route('/:device_secret/:date1/:date2')
 
         let devices = await Device.find()
         let sortedDevices = [];
-        
-        devices.forEach((element)=>{
-            if( ((new Date(element.date)).getTime() >= (new Date(date1)).getTime()) && ((new Date(element.date)).getTime() <= (new Date(date2)).getTime()) ){
-                   sortedDevices.push(element)
+
+        devices.forEach((element) => {
+            if (secret == element.device_secret && ((new Date(element.date)).getTime() >= (new Date(date1)).getTime()) && ((new Date(element.date)).getTime() <= (new Date(date2)).getTime())) {
+                sortedDevices.push(element)
             }
         })
 

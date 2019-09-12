@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
   menuItems: any[];
 
   constructor(private authSvc: AuthService) { 
-    this.authSvc.thisUser().subscribe((result)=>{
+    this.authSvc.thisUser().subscribe((result: any)=>{
   
      
       if(result.result.isUser){ 

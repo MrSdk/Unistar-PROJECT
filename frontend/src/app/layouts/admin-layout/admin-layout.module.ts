@@ -37,6 +37,7 @@ import { DeviceComponent } from 'app/device/device.component';
 import { DeviceControlComponent } from 'app/device-control/device-control.component';
 import { AdminSettingComponent } from 'app/admin-setting/admin-setting.component';
 import { BusComponent } from 'app/bus/bus.component';
+import { MapComponent } from 'app/map/map.component'; 
  
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { BusComponent } from 'app/bus/bus.component';
     DeviceComponent,
     DeviceControlComponent,
     AdminSettingComponent,
-    BusComponent
+    BusComponent,
+    MapComponent, 
     // UpgradeComponent,
   ]
 })

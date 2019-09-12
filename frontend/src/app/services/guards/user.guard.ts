@@ -25,7 +25,7 @@ export class UserGuard implements CanActivate {
         }
         
       }),
-      map((res)=>{ 
+      map((res: any)=>{ 
         
         if(res.result.isAdmin || res.result.isUser){ 
           return true;

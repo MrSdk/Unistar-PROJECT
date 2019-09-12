@@ -90,8 +90,8 @@ export class ClientCreateComponent implements OnInit {
       }
     });
 
-    this.authSvc.register(user).subscribe((res)=>{
-      console.log(res.json());
+    this.authSvc.register(user).subscribe((res: any)=>{
+      console.log(res);
       
       Swal.fire(
         'Client Saved',

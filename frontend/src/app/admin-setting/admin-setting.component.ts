@@ -21,8 +21,8 @@ export class AdminSettingComponent implements OnInit {
   }
 
   getAdmin(){
-    this.adminSvc.get().subscribe((result)=>{
-      let res = result.json()
+    this.adminSvc.get().subscribe((result: any)=>{
+      let res = result
       this.login = res.login;
       this.password = res.password;
     },()=>{

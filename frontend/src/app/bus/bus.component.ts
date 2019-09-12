@@ -30,7 +30,7 @@ export class BusComponent implements OnInit {
   }
 
   verifyUser(){
-    this.authSvc.thisUser().subscribe((result)=>{
+    this.authSvc.thisUser().subscribe((result: any)=>{
       console.log(result);
       
       let res = result.result;
@@ -59,7 +59,7 @@ export class BusComponent implements OnInit {
   }
 
   verifyIsGps(){
-    this.deviceSvc.isGps(this.route.snapshot.params.id).subscribe((result)=>{ 
+    this.deviceSvc.isGps(this.route.snapshot.params.id).subscribe((result: any)=>{ 
       
       if(result.hasBus){
         this.allowToViewResult = true;
@@ -72,7 +72,7 @@ export class BusComponent implements OnInit {
   }
 
   getGpses(){
-    this.deviceSvc.gpsOfToday(this.route.snapshot.params.id).subscribe((result)=>{ 
+    this.deviceSvc.gpsOfToday(this.route.snapshot.params.id).subscribe((result: any)=>{ 
       this.buses = result.buses
       console.log(this.buses);
 

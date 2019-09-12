@@ -29,6 +29,11 @@ import { LocationStrategy, Location, PathLocationStrategy } from '@angular/commo
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NotAllowedComponent } from './not-allowed/not-allowed.component';
 import { HomeComponent } from './home/home.component';
+import { HttpClientModule } from '@angular/common/http';
+// import { DailyChartComponent } from './daily-chart/daily-chart.component';
+// import { WeeklyChartComponent } from './weekly-chart/weekly-chart.component';
+// import { MonthlyChartComponent } from './monthly-chart/monthly-chart.component';
+// import { AnnualChartComponent } from './annual-chart/annual-chart.component';
 // import { BusComponent } from './bus/bus.component';
 // import { MapComponent } from './map/map.component';
 // import { AdminSettingComponent } from './admin-setting/admin-setting.component';
@@ -46,6 +51,7 @@ import { HomeComponent } from './home/home.component';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    HttpClientModule,
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
@@ -58,7 +64,7 @@ import { HomeComponent } from './home/home.component';
     LoginComponent,
     PageNotFoundComponent,
     NotAllowedComponent,
-    HomeComponent,
+    HomeComponent
     // BusComponent,
     // MapComponent,
     // AdminSettingComponent,

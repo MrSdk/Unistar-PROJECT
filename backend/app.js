@@ -57,6 +57,7 @@ Date.prototype.getWeek = function() {
 // console.log(Math.floor(40 / 60));
 // console.log(140 % 60);  
 
+
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, './dist', 'index.html'))
 })

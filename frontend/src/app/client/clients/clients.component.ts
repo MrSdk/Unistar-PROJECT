@@ -17,8 +17,8 @@ export class ClientsComponent implements OnInit {
   }
 
   getUsers(){
-    this.userSvc.getAll().subscribe(result => {
-      this.users = (result.json()).clients; 
+    this.userSvc.getAll().subscribe((result: any) => {
+      this.users = (result).clients; 
       
     },(e)=>{
       console.log(e);

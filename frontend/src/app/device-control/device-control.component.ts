@@ -18,9 +18,9 @@ export class DeviceControlComponent implements OnInit {
   }
 
   getUsers(){
-    this.userSvc.getAll().subscribe((result)=>{
+    this.userSvc.getAll().subscribe((result: any)=>{
       
-      this.users = (result.json()).clients
+      this.users = (result).clients
 
     },()=>{
       Swal.fire(

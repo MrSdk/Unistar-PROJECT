@@ -18,6 +18,7 @@ import { AuthGuard } from 'app/services/guards/auth.guard';
 import { UserGuard } from 'app/services/guards/user.guard';
 import { AdminSettingComponent } from 'app/admin-setting/admin-setting.component';
 import { BusComponent } from 'app/bus/bus.component';
+import { MapComponent } from 'app/map/map.component'; 
 // import { UpgradeComponent } from '../../upgrade/upgrade.component';
 
 export const AdminLayoutRoutes: Routes = [
@@ -33,8 +34,9 @@ export const AdminLayoutRoutes: Routes = [
         { path: 'edit/:id', component: ClientEditComponent },
         { path: 'create', component: ClientCreateComponent }
     ] },
-    { path: 'company/:id' , component: CompanyComponent , canActivate: [UserGuard]},
+    { path: 'company/:id' , component: CompanyComponent, canActivate: [UserGuard]},
     { path: 'device/:secret' , component: DeviceComponent, canActivate: [UserGuard] },
+    // { path: 'device/:secret' , component: DailyChartComponent, canActivate: [UserGuard] },
     { path: 'bus/:id' , component: BusComponent, canActivate: [UserGuard] },
     { path: 'device-control' , component: DeviceControlComponent , canActivate: [AuthGuard]},
     { path: 'settings' , component: AdminSettingComponent, canActivate: [AuthGuard] }

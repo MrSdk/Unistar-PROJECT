@@ -39,8 +39,8 @@ export class ClientEditComponent implements OnInit {
   }
 
   getUser(){
-    this.userSvc.get(this.user_id).subscribe((result)=>{
-      let user = (result.json() ).client
+    this.userSvc.get(this.user_id).subscribe((result: any)=>{
+      let user = (result ).client
 
       this.form.patchValue({
         name: user.name,
@@ -108,7 +108,7 @@ export class ClientEditComponent implements OnInit {
      }
    });
 
-   this.userSvc.edit(this.user_id,user).subscribe((res)=>{
+   this.userSvc.edit(this.user_id,user).subscribe((res: any)=>{
   
      Swal.fire(
        'Client Updated',

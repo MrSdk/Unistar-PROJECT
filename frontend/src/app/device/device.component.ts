@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, DoCheck, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, DoCheck, SimpleChanges, OnDestroy, QueryList } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { UserService } from 'app/services/user.service';
 import { DeviceService } from 'app/services/device.service';
@@ -13,6 +13,43 @@ import { Subscribable, Subscription } from 'rxjs';
   styleUrls: ['./device.component.scss']
 })
 export class DeviceComponent implements OnInit , OnDestroy {
+ 
+  // @ViewChild(BaseChartDirective, { static: false }) chart: BaseChartDirective; 
+
+	@ViewChild(BaseChartDirective, { static: false }) customerStateChart: any;
+	@ViewChild(BaseChartDirective, { static: false }) customerReleaseChart: any;
+	@ViewChild(BaseChartDirective, { static: false }) customerStateChart2: any;
+	@ViewChild(BaseChartDirective, { static: false }) customerReleaseChart2: any;
+
+	@ViewChild("baseChart_d", { static: false })
+	chart1: BaseChartDirective;
+
+	@ViewChild("baseChart_w", { static: false })
+  chart2: BaseChartDirective;
+  
+	@ViewChild("baseChart_m", { static: false })
+	chart3: BaseChartDirective;
+
+	@ViewChild("baseChart_a", { static: false })
+  chart4: BaseChartDirective;
+
+  constructor(private authSvc: AuthService,private userSvc: UserService, private devSvc: DeviceService, private route: ActivatedRoute, private router: Router) {
+    
+    this.getAllInformations()
+    this.verifyOfDevice()
+    setTimeout(()=>{
+      this.allowToAll = true;
+      
+      // this.chart.getChartBuilder(this.chart.ctx);
+    },600) 
+    setTimeout(()=>{
+      
+      // this.chart.ngOnInit()
+      // this.chart.update()
+    //   this.chart.getChartBuilder(this.chart.ctx);
+    },8000)
+  } 
+ 
   public users;
   public isDevice = false;
  
@@ -31,7 +68,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
   public thisDate = new Date();
   
   public checkMinutes = [1, 5, 10, 20, 30, 60, 120, 240, 480, 720];
-  public checkYears = [ ];
+  public checkYears = [ `${(new Date().getFullYear())}` , 'All of them' ];
   public checkMonths = [
     "Januar",
     "February",
@@ -116,21 +153,8 @@ export class DeviceComponent implements OnInit , OnDestroy {
   private subscription3: Subscription; 
 
 
-  @ViewChild(BaseChartDirective, { static: false }) chart: BaseChartDirective;
-  constructor(private authSvc: AuthService,private userSvc: UserService, private devSvc: DeviceService, private route: ActivatedRoute, private router: Router) {
-    
-    this.getAllInformations()
-    this.verifyOfDevice()
-    setTimeout(()=>{
-      this.allowToAll = true;
-    },600)
-    
-  }
  
-  ngOnInit() {
-    //  console.log(this.getWeekNumber(new Date("2019-08-26T18:32:52.131Z")));
-    //  console.log((new Date("2019-08-26T18:32:52.131Z").getDay()));
-     
+  ngOnInit() { 
   }
 
   getFilteredYears(){
@@ -155,7 +179,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
   }
 
   verifyOfDevice(){
-    this.subscription1 =  this.authSvc.thisUser().subscribe((result)=>{
+    this.subscription1 =  this.authSvc.thisUser().subscribe((result: any)=>{
       let res = result.result;
       if(res.isAdmin){
         // this.getAllInformations()
@@ -165,8 +189,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
         }else{
           // this.getAllInformations()
         }
-      }
-      
+      } 
     })
   }
   
@@ -229,13 +252,14 @@ export class DeviceComponent implements OnInit , OnDestroy {
   checkedSelect() {
     let secret_key = this.thisSecretKey
 
-    this.barChartLabels_d = [];
+    let labels = [];
 
     for (let i = 0; i <= 24 * 60; i += this.checkedMinute) {
       let time = i <= 60 ? i + " m" : Math.floor(i / 60) + " h " + ((i%60 > 0) ? (i % 60 + ' m').toString() : '');
       
-      this.barChartLabels_d.push(time);
+      labels.push(time);
     }
+    this.barChartLabels_d = labels
  
     for (let i = 0; i <  this.sortedDevices.length; i++) {
       if (this.sortedDevices[i].device_secret == secret_key) {
@@ -248,10 +272,13 @@ export class DeviceComponent implements OnInit , OnDestroy {
   }
   
   getDevices() {
-    this.subscription3 = this.devSvc.getAll().subscribe(result => {
-      let deevices = result.json().devices;
-      let sorted_devices = result.json().sortedDevices;
-      let dailyDevices = result.json().dailyDevices
+    this.subscription3 = this.devSvc.getAll().subscribe((result: any) => {
+ 
+      this.thisSecretKey = this.route.snapshot.params.secret
+
+      let deevices = result.devices;
+      let sorted_devices = result.sortedDevices;
+      let dailyDevices = result.dailyDevices
       // console.log(sorted_devices);
       this.devices = deevices;
 
@@ -271,25 +298,56 @@ export class DeviceComponent implements OnInit , OnDestroy {
             this.devices
           )
         };
-      }
+      } 
+      
     // For Annual
-    this.sorted_dailyDevices = dailyDevices.filter(item => item.device_secret == this.thisSecretKey) 
+    console.log(this.thisSecretKey);
+    
+    let temporarySortedDevices = []
+    dailyDevices.forEach((item) => {
+        if( item.device_secret == this.thisSecretKey ){
+          temporarySortedDevices.push(item)
+        }
+    }) 
+    // dailyDevices.forEach((item) => {
+    //   temporarySortedDevices.forEach((item2) => {
+    //     if( item.device_secret == this.thisSecretKey && item2._id != item._id ){
+    //       temporarySortedDevices.push(item)
+    //     }
+    //   }) 
+    // }) 
+
+    this.sorted_dailyDevices = temporarySortedDevices;
 
       let dataYears = this.checkYears;
-      this.checkYears = [];
+      let years = [];
       
       if(this.sorted_dailyDevices.length > 0){
+        console.log("EEEEEEEEE");
+        
         for(let i=(new Date(this.sorted_dailyDevices[0].date)).getFullYear();i<=(new Date()).getFullYear();i++){
-          this.checkYears.push(i.toString())
+          years.push(i.toString())
         }  
       }
-      this.checkYears.push('All of them')
-      this.checkedYear = this.checkYears.length - 2;
-      this.checkedYearOfMonth = this.checkYears.length - 2;
+      years.push('All of them')
+      this.checkedYear = years.length - 2;
+      this.checkedYearOfMonth = years.length - 2;
 
+      this.checkYears = [...years]
+      console.log(this.checkYears);
+      
+      // this.checkedYearOfMonth = 
+      
       setTimeout(()=>{
+        if (this.chart1 && this.chart1.chart && this.chart1.chart.config) {
+          this.chart1.getChartBuilder(this.chart1.ctx)
+        }
         this.allowCanvasDaily = true;
-      },500)
+        
+      })
+      // setTimeout(()=>{
+        // this.chart.getChartBuilder(this.chart.ctx)
+      // },500)
 
       // For Weekly
       this.setWeekData( deevices )
@@ -357,7 +415,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
     });
 
     barData[0].data.push(0);
-    barData[1].data.push(0);
+    barData[1].data.push(0); 
 
     // for(let i=0;i<24*60;i+=this.checkedMinute){
     if(this.checkedMinute){
@@ -378,11 +436,12 @@ export class DeviceComponent implements OnInit , OnDestroy {
             (thisDayDevices[j].in + thisDayDevices[j].out) / 2
           );
           barData[1].data.push(thisDayDevices[j].penalty);
+          // this.chart.update() 
         }
       }
       if (!has) {
         barData[0].data.push(0);
-        barData[1].data.push(0);
+        barData[1].data.push(0);  
       }
     }
     }else{
@@ -422,7 +481,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
     });
 
     barData[0].data.push(0);
-    barData[1].data.push(0);
+    barData[1].data.push(0); 
  
       for (let i = 0; i < 24 * 60; i += this.checkedMinute) {
       let has = false;
@@ -438,7 +497,8 @@ export class DeviceComponent implements OnInit , OnDestroy {
           has = true;
 
           barData[0].data.push( 0 );
-          barData[1].data.push( 0 );
+          barData[1].data.push( 0 ); 
+          
         }
       }
       if (!has) { 
@@ -452,8 +512,19 @@ export class DeviceComponent implements OnInit , OnDestroy {
 }
 
 public setAnnualData( ){
+  // this.barChartData_a
+  
+
   let dailyDevices = this.sorted_dailyDevices 
   if(this.checkedYear != (this.checkYears.length-1) ){
+    
+    let data4 = [
+      { data: [ ], label: "count of People" },
+      {
+        data: [ ],
+        label: "count of Penalties"
+      }
+    ];
 
       for(let i=0; i< 12; i++){
         let has = false;
@@ -469,17 +540,46 @@ public setAnnualData( ){
         }
 
         if(!has){
-          this.barChartData_a[0].data.push( 0 )
-          this.barChartData_a[1].data.push( 0 )
+          data4[0].data.push( 0 )
+          data4[1].data.push( 0 ) 
         }
         else{
-          this.barChartData_a[0].data.push( sum_people )
-          this.barChartData_a[1].data.push( sum_penalty )
+          data4[0].data.push( sum_people )
+          data4[1].data.push( sum_penalty ) 
+          // this.chart.update()
         }
 
       }
- 
+      // this.allowCanvasYearly = false;
+      this.barChartData_a = data4 
+      
+      
+      setTimeout(()=>{
+        if (this.chart4 && this.chart4.chart && this.chart4.chart.config) {
+          this.chart4.getChartBuilder(this.chart4.ctx)
+        }
+        this.allowCanvasYearly = true;
+        
+      })
+      // setTimeout(()=>{
+       
+        // this.chart.getChartBuilder(this.chart.ctx)
+        
+      // },500)
+
+      // this.chart.update();
+
   }else{
+
+    let data4 = [
+      { data: [ ], label: "count of People" },
+      {
+        data: [ ],
+        label: "count of Penalties"
+      }
+    ];
+    let labels = [];
+
     let minYear = new Date().getFullYear()
     for(let i=0;i<this.sorted_dailyDevices.length;i++){
       
@@ -489,7 +589,7 @@ public setAnnualData( ){
     } 
     
     for(let i=minYear;i<=(new Date()).getFullYear();i++){
-      this.barChartLabels_a.push(i.toString());
+      labels.push(i.toString());
       let sum_people = 0;
       let sum_penalty = 0;
 
@@ -502,26 +602,50 @@ public setAnnualData( ){
         }
       }
 
-      this.barChartData_a[0].data.push( sum_people )
-      this.barChartData_a[1].data.push( sum_penalty )
-
+      data4[0].data.push( sum_people )
+      data4[1].data.push( sum_penalty )
+      // this.chart.update()
     }
+    // this.allowCanvasYearly = false;
 
+    this.barChartLabels_a = labels
+    this.barChartData_a = data4 
+    
+    
+    setTimeout(()=>{
+      if (this.chart4 && this.chart4.chart && this.chart4.chart.config) {
+        this.chart4.getChartBuilder(this.chart4.ctx)
+      }
+      this.allowCanvasYearly = true;
+      
+    })
+  // setTimeout(()=>{
+    
+    // this.chart.getChartBuilder(this.chart.ctx)
+    
+  // },500)
+
+// this.chart.update();
   } 
-  setTimeout(()=>{
-    this.allowCanvasYearly = true;
-  },500)
+  
 }
 
 public setMonthData( sorted_devices ){
-  this.barChartLabels_m = []
-  this.barChartData_m[0].data = []
-  this.barChartData_m[1].data = []
+  let labels = []
+  let data3 = [
+    { data: [], label: "count of People" },
+    {
+      data: [],
+      label: "count of Penalties"
+    }
+  ];
+  // this.barChartLabels_m
+ // this.data3[0]
 
   let fullDaysOfThisMonth = (new Date(new Date(this.checkYears[this.checkedYearOfMonth] ).getFullYear(), this.checkedMonth + 1, 0).getDate())
 
   for(let i=0; i<=fullDaysOfThisMonth;i++){
-    this.barChartLabels_m.push(i.toString())
+    labels.push(i.toString())
   } 
   
   let thisMonthDatas = sorted_devices.filter(item => (item.device_secret == this.thisSecretKey) && ((new Date(item.date)).getFullYear() == (new Date(this.checkYears[this.checkedYearOfMonth] )).getFullYear() ) && ((new Date(item.date)).getMonth() == this.checkedMonth ) )
@@ -535,26 +659,47 @@ public setMonthData( sorted_devices ){
     for(let j=thisMonthDatas.length-1;j>=0 ; j--){
       if(!has && ((new Date(thisMonthDatas[j].date)).getDate() == i) ){
         has = true;
-        this.barChartData_m[0].data.push((thisMonthDatas[j].in + thisMonthDatas[j].out)/2)
-        this.barChartData_m[1].data.push(thisMonthDatas[j].penalty)
+        data3[0].data.push((thisMonthDatas[j].in + thisMonthDatas[j].out)/2)
+        data3[1].data.push(thisMonthDatas[j].penalty)
+        // this.chart.update()
       }
     }
     if(!has){
-      this.barChartData_m[0].data.push( 0 )
-      this.barChartData_m[1].data.push( 0 )
+      data3[0].data.push( 0 )
+      data3[1].data.push( 0 ) 
     }
 
   }
+  // this.allowCanvasMonthly = false;
+
+  this.barChartLabels_m = labels;
+  this.barChartData_m = data3;
+  // this.chart.update(); 
+  
  
   setTimeout(()=>{
+    if (this.chart3 && this.chart3.chart && this.chart3.chart.config) {
+      this.chart3.getChartBuilder(this.chart3.ctx)
+    }
     this.allowCanvasMonthly = true;
-  },500)
+    
+  })
+  // setTimeout(()=>{
+    
+    // this.chart.getChartBuilder(this.chart.ctx)
+  // },500)
   
 }
 
 public setWeekData(sorted_devices){
   let for_week_sorted_d = sorted_devices.filter(item => item.device_secret == this.thisSecretKey)
-
+  let data2 = [
+    { data: [], label: "count of People" },
+    {
+      data: [],
+      label: "count of Penalties"
+    }
+  ];
   // console.log(for_week_sorted_d);
   
 
@@ -565,13 +710,14 @@ public setWeekData(sorted_devices){
       if( !has && (this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == j ) && ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear()) ){
         has = true;
         
-        this.barChartData_w[0].data.push((for_week_sorted_d[i].in + for_week_sorted_d[i].out)/2)
-        this.barChartData_w[1].data.push(for_week_sorted_d[i].penalty)
+        data2[0].data.push((for_week_sorted_d[i].in + for_week_sorted_d[i].out)/2)
+        data2[1].data.push(for_week_sorted_d[i].penalty)
+        // this.chart.update()
       }
     }
     if(!has){
-      this.barChartData_w[0].data.push(0)
-      this.barChartData_w[1].data.push(0)
+      data2[0].data.push(0)
+      data2[1].data.push(0) 
     }
   }
   // for Sunday
@@ -580,18 +726,33 @@ public setWeekData(sorted_devices){
     //  this.barChartData_w[0].data
     if( !has && (this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == 0 )&& ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear())  ){
       has = true;
-      this.barChartData_w[0].data.push((for_week_sorted_d[i].in + for_week_sorted_d[i].out)/2)
-      this.barChartData_w[1].data.push(for_week_sorted_d[i].penalty)
+      data2[0].data.push((for_week_sorted_d[i].in + for_week_sorted_d[i].out)/2)
+      data2[1].data.push(for_week_sorted_d[i].penalty)
+      // this.chart.update()
     }
   }
   if(!has){
-    this.barChartData_w[0].data.push(0)
-    this.barChartData_w[1].data.push(0)
+    data2[0].data.push(0)
+    data2[1].data.push(0)
   }
+
+  // this.allowCanvasWeekly = false;
+
+  this.barChartData_w = data2;
+  // this.chart.update(); 
+  
   
   setTimeout(()=>{
+    if (this.chart2 && this.chart2.chart && this.chart2.chart.config) {
+      this.chart2.getChartBuilder(this.chart2.ctx)
+    }
     this.allowCanvasWeekly = true; 
-  },500)
+    
+  })
+  // setTimeout(()=>{
+    
+    // this.chart.getChartBuilder(this.chart.ctx)
+  // },500)
 }
 
 ngOnDestroy(){  

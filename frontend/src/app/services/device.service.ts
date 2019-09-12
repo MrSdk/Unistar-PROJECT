@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { map } from 'rxjs/operators'
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeviceService {
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   getAll(){
     return this.http.get( "/api/device" )
@@ -21,7 +22,7 @@ export class DeviceService {
     return this.http.get('/api/device/isGps/'+id)
       .pipe(
         map((result)=>{
-          return result.json()
+          return result
         })
       )  
   }
@@ -30,7 +31,7 @@ export class DeviceService {
     return this.http.get('/api/device/gpsOfToday/'+id)
       .pipe(
         map((result)=>{
-          return result.json()
+          return result
         })
       )  
   }

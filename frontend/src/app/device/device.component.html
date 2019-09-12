@@ -31,8 +31,7 @@
                             <div *ngIf="allowCanvasDaily">
                                 <h4> Daily</h4>
 
-                                <canvas baseChart [datasets]="(getDevice()).dayInfo" [labels]="barChartLabels_d" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType"></canvas>
-                                <!-- <a href="http://localhost:8080/api/download/daily/{{thisSecretKey}}" mat-raised-button color="primary"> <i class="material-icons text-default">cloud_download</i> <b> Download</b></a> -->
+                                <canvas baseChart #baseChart_d="base-chart" [datasets]="(getDevice()).dayInfo" [labels]="barChartLabels_d" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType"></canvas>
                             </div>
                         </mat-card>
                     </div>
@@ -42,9 +41,8 @@
                             <div *ngIf="allowCanvasWeekly">
                                 <h4> Weekly</h4>
 
-                                <canvas baseChart [datasets]="barChartData_w" [labels]="barChartLabels_w" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType"></canvas>
+                                <canvas baseChart #baseChart_w="base-chart" [datasets]="barChartData_w" [labels]="barChartLabels_w" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType"></canvas>
 
-                                <!-- <a href="http://localhost:8080/api/download/weekly/{{thisSecretKey}}" mat-raised-button color="primary"> <i class="material-icons text-default">cloud_download</i> <b> Download</b></a> -->
                             </div>
                         </mat-card>
                     </div>
@@ -70,7 +68,7 @@
                             <div *ngIf="allowCanvasMonthly">
                                 <h4> Monthly</h4>
 
-                                <canvas baseChart [datasets]="barChartData_m" [labels]="barChartLabels_m" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"></canvas>
+                                <canvas baseChart #baseChart_m="base-chart" [datasets]="barChartData_m" [labels]="barChartLabels_m" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"></canvas>
 
                                 <!-- <a href="http://localhost:8080/api/download/monthly/{{thisSecretKey}}" mat-raised-button color="primary"> <i class="material-icons text-default">cloud_download</i> <b> Download</b></a> -->
                             </div>
@@ -90,7 +88,7 @@
                             <div *ngIf="allowCanvasYearly">
                                 <h4> Annual </h4>
 
-                                <canvas baseChart [datasets]="barChartData_a" [labels]="barChartLabels_a" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"></canvas>
+                                <canvas baseChart #baseChart_a="base-chart" [datasets]="barChartData_a" [labels]="barChartLabels_a" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"></canvas>
 
                                 <!-- <button mat-raised-button (click)="change()" color="primary"> Change </button> -->
                             </div>

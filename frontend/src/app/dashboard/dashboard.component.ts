@@ -4,6 +4,7 @@ import { ChartDataSets, ChartOptions } from "chart.js";
 import { Color, BaseChartDirective, Label } from "ng2-charts";
 import { UserService } from "app/services/user.service";
 import { DeviceService } from "app/services/device.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-dashboard",
@@ -15,13 +16,14 @@ export class DashboardComponent implements OnInit {
  
   constructor(private userSvc: UserService, private devSvc: DeviceService) {
     this.getUsers();
+ 
     // this.getDevices();
   }
   ngOnInit() {}
   
   getUsers() {
-    this.userSvc.getAll().subscribe(result => {
-      this.users = result.json().clients;
+    this.userSvc.getAll().subscribe((result: any) => {
+      this.users = result.clients;
     });
   }
 

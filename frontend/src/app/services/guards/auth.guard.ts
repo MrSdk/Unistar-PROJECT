@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate  {
         }
         
       }),
-      map((res)=>{
+      map((res: any)=>{
         
         if(res.result.isAdmin){ 
           return true;
