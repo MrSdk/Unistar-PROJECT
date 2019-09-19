@@ -16,14 +16,50 @@
         <div *ngIf="allowToAll" class="row">
             <div class="col-lg-10 col-md-10 col-sm-10" style="margin: auto">
                 <div class="row" *ngIf="device_has(); else noDevice">
-                    <mat-form-field>
-                        <mat-label>Check interval</mat-label>
-                        <mat-select [(value)]="checkedMinute">
-                            <mat-option *ngFor="let checkMinute of checkMinutes" (click)="checkedSelect()" [value]="checkMinute">
-                                {{ ( checkMinute
-                                <=60 )? (checkMinute + ' minut') : (checkMinute / 60 + ' hour') }} </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <div>
+
+                        <mat-form-field>
+                            <mat-label>Check Year</mat-label>
+                            <mat-select [(value)]="checkedYearOfDay">
+                                <mat-option *ngFor="let checkYear of getFilteredYears()" (click)="checkedMonthsOfDay()" [value]="checkYears.indexOf(checkYear)">
+                                    {{ checkYear }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field style="margin-left: 10%;">
+                            <mat-label>Check Month</mat-label>
+                            <mat-select [(value)]="checkedMonthOfDay">
+                                <mat-option *ngFor="let checkMonth of checkMonths" (click)="checkedMonthsOfDay()" [value]="checkMonths.indexOf(checkMonth)">
+                                    {{ checkMonth }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                    <div>
+                        <mat-form-field style="margin-left: 10%;">
+                            <mat-label>Check Date</mat-label>
+                            <mat-select [(value)]="checkedDateOfDay">
+                                <mat-option *ngFor="let checkDate of checkDates" (click)="checkedMonthsOfDay()" [value]="checkDates.indexOf(checkDate)">
+                                    {{ checkDate }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                    <div>
+                        <mat-form-field style="margin-left: 10%;">
+                            <mat-label>Check interval</mat-label>
+                            <mat-select [(value)]="checkedMinute">
+                                <mat-option *ngFor="let checkMinute of checkMinutes" (click)="checkedSelect()" [value]="checkMinute">
+                                    {{ ( checkMinute
+                                    <=60 )? (checkMinute + ' minut') : (checkMinute / 60 + ' hour') }} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
                     <div class="col-md-12" style="margin: 5px">
 
                         <mat-card>

@@ -55,7 +55,13 @@ Date.prototype.getWeek = function() {
 
 // 140
 // console.log(Math.floor(40 / 60));
-// console.log(140 % 60);  
+// console.log(140 % 60);   
+// let a = new Date()
+// a.setFullYear(2020)
+// a.setMonth(9)
+// a.setDate(5)
+
+// console.log(a);
 
 
 app.get('/*', (req, res) => {

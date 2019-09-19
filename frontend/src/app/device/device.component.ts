@@ -41,13 +41,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
       this.allowToAll = true;
       
       // this.chart.getChartBuilder(this.chart.ctx);
-    },600) 
-    setTimeout(()=>{
-      
-      // this.chart.ngOnInit()
-      // this.chart.update()
-    //   this.chart.getChartBuilder(this.chart.ctx);
-    },8000)
+    },600)  
   } 
  
   public users;
@@ -84,10 +78,14 @@ export class DeviceComponent implements OnInit , OnDestroy {
     "December"
   ]
   
-  public checkedMinute = null;
+  public checkedMinute = 720;
   public checkedYear = 0;
   public checkedMonth = (new Date()).getMonth();
   public checkedYearOfMonth = 0;  
+  public checkedYearOfDay = 0;
+  public checkedMonthOfDay = (new Date()).getMonth();
+  public checkedDateOfDay = (new Date()).getDate();
+  public checkDates = []
 
   public barChartOptions: any = {
     scaleShowVerticalLines: false,
@@ -123,29 +121,33 @@ export class DeviceComponent implements OnInit , OnDestroy {
   public barChartLegend: boolean = true;
 
   public barChartData_d: any[] = [
-    { data: [], label: "count of People" },
-    { data: [], label: "count of Penalties" }
+    { data: [], label: "The number of visitors" },
+    { data: [], label: "count of Penalties" },
+    { data: [ ], label: "Right now inside" }
   ];
   public barChartData_w: any[] = [
-    { data: [], label: "count of People" },
+    { data: [], label: "The number of visitors" },
     {
       data: [],
       label: "count of Penalties"
-    }
+    },
+    { data: [ ], label: "Right now inside" }
   ];
   public barChartData_m: any[] = [
-    { data: [], label: "count of People" },
+    { data: [], label: "The number of visitors" },
     {
       data: [],
       label: "count of Penalties"
-    }
+    },
+    { data: [ ], label: "Right now inside" }
   ];
   public barChartData_a: any[] = [
-    { data: [ ], label: "count of People" },
+    { data: [ ], label: "The number of visitors" },
     {
       data: [ ],
       label: "count of Penalties"
-    }
+    },
+    { data: [ ], label: "Right now inside" }
   ];
 
   private subscription1: Subscription;
@@ -165,7 +167,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
     
     let text = this.thisSecretKey + "/" + (new Date(date1)).getTime() + "/" + (new Date(date2)).getTime()
 
-    window.location.href = 'http://localhost:8080/api/download/' + text;
+    window.location.href = '/api/download/' + text;
  
     
     return text;
@@ -249,10 +251,16 @@ export class DeviceComponent implements OnInit , OnDestroy {
     this.setAnnualData()
   }
 
+  checkedMonthsOfDay(){ 
+    this.setDateOfDay()
+    this.checkedSelect()
+  }
+
   checkedSelect() {
     let secret_key = this.thisSecretKey
 
-    let labels = [];
+    let labels = []; 
+    
 
     for (let i = 0; i <= 24 * 60; i += this.checkedMinute) {
       let time = i <= 60 ? i + " m" : Math.floor(i / 60) + " h " + ((i%60 > 0) ? (i % 60 + ' m').toString() : '');
@@ -301,7 +309,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
       } 
       
     // For Annual
-    console.log(this.thisSecretKey);
+    // console.log(this.thisSecretKey);
     
     let temporarySortedDevices = []
     dailyDevices.forEach((item) => {
@@ -323,7 +331,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
       let years = [];
       
       if(this.sorted_dailyDevices.length > 0){
-        console.log("EEEEEEEEE");
+        // console.log("EEEEEEEEE");
         
         for(let i=(new Date(this.sorted_dailyDevices[0].date)).getFullYear();i<=(new Date()).getFullYear();i++){
           years.push(i.toString())
@@ -332,9 +340,10 @@ export class DeviceComponent implements OnInit , OnDestroy {
       years.push('All of them')
       this.checkedYear = years.length - 2;
       this.checkedYearOfMonth = years.length - 2;
+      this.checkedYearOfDay = years.length - 2;
 
       this.checkYears = [...years]
-      console.log(this.checkYears);
+      // console.log(this.checkYears);
       
       // this.checkedYearOfMonth = 
       
@@ -348,7 +357,10 @@ export class DeviceComponent implements OnInit , OnDestroy {
       // setTimeout(()=>{
         // this.chart.getChartBuilder(this.chart.ctx)
       // },500)
-
+      
+      // For Daily
+    this.setDateOfDay();
+    this.checkedSelect()
       // For Weekly
       this.setWeekData( deevices )
       // For Monthly
@@ -395,10 +407,20 @@ export class DeviceComponent implements OnInit , OnDestroy {
   // }
  
   public getDataOfDay(secret_key, deevices) {
-    let thisDate = new Date();
+    let thisDate = new Date(); 
+    
+
+    thisDate.setFullYear(Number(this.checkYears[this.checkedYearOfDay]))
+    thisDate.setMonth(this.checkedMonthOfDay)
+    thisDate.setDate(this.checkedDateOfDay); 
+    
+    // thisDate.setFullYear(this.checkedYearOfDay)
+
+
     let barData = [
-      { data: [], label: "count of People" },
-      { data: [], label: "count of Penalties" }
+      { data: [], label: "The number of visitors" },
+      { data: [], label: "count of Penalties" },
+      { data: [ ], label: "Right now inside" }
     ];
   
     let thisDayDevices = deevices.filter(item => {
@@ -416,6 +438,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
 
     barData[0].data.push(0);
     barData[1].data.push(0); 
+    barData[2].data.push(0); 
 
     // for(let i=0;i<24*60;i+=this.checkedMinute){
     if(this.checkedMinute){
@@ -432,16 +455,16 @@ export class DeviceComponent implements OnInit , OnDestroy {
         ) {
           has = true;
 
-          barData[0].data.push(
-            (thisDayDevices[j].in + thisDayDevices[j].out) / 2
-          );
+          barData[0].data.push(thisDayDevices[j].visitor);
           barData[1].data.push(thisDayDevices[j].penalty);
+          barData[2].data.push(thisDayDevices[j].inroom);
           // this.chart.update() 
         }
       }
       if (!has) {
         barData[0].data.push(0);
         barData[1].data.push(0);  
+        barData[2].data.push(0);  
       }
     }
     }else{
@@ -455,8 +478,9 @@ export class DeviceComponent implements OnInit , OnDestroy {
   public getDataZeroOfDay(secret_key, deevices) {
     let thisDate = new Date();
     let barData = [
-      { data: [], label: "count of People" },
-      { data: [], label: "count of Penalties" }
+      { data: [], label: "The number of visitors" },
+      { data: [], label: "count of Penalties" },
+      { data: [ ], label: "Right now inside" }
     ];
 
     // barData ni massivlarini 0 bilan toldirish
@@ -482,6 +506,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
 
     barData[0].data.push(0);
     barData[1].data.push(0); 
+    barData[2].data.push(0); 
  
       for (let i = 0; i < 24 * 60; i += this.checkedMinute) {
       let has = false;
@@ -498,17 +523,30 @@ export class DeviceComponent implements OnInit , OnDestroy {
 
           barData[0].data.push( 0 );
           barData[1].data.push( 0 ); 
+          barData[2].data.push( 0 ); 
           
         }
       }
       if (!has) { 
         barData[0].data.push(0);
         barData[1].data.push(0);
+        barData[2].data.push(0);
       } 
    
 
     return barData;
   }
+}
+
+public setDateOfDay(){
+  this.checkDates = [];
+
+  let fullDaysOfThisMonth = (new Date(new Date(this.checkYears[this.checkedYearOfDay] ).getFullYear(), this.checkedMonthOfDay + 1, 0).getDate())
+
+  for(let i=0; i<=fullDaysOfThisMonth;i++){
+    this.checkDates.push(i.toString())
+  } 
+ 
 }
 
 public setAnnualData( ){
@@ -519,37 +557,45 @@ public setAnnualData( ){
   if(this.checkedYear != (this.checkYears.length-1) ){
     
     let data4 = [
-      { data: [ ], label: "count of People" },
+      { data: [ ], label: "The number of visitors" },
       {
         data: [ ],
         label: "count of Penalties"
-      }
+      },
+      { data: [ ], label: "Right now inside" }
     ];
 
       for(let i=0; i< 12; i++){
         let has = false;
         let sum_people = 0
         let sum_penalty = 0
+        let sum_inroom = 0
+        let count_inroom = 0
+
         for(let j=0;j<dailyDevices.length;j++){
           if( ((new Date(dailyDevices[j].date)).getFullYear() == new Date(this.checkYears[this.checkedYear] ).getFullYear() ) && ((new Date(dailyDevices[j].date)).getMonth() == i ) ){
             has = true;
-            sum_people += Math.floor((dailyDevices[j].in + dailyDevices[j].out)/2);
+            sum_people += dailyDevices[j].visitor;
             sum_penalty += dailyDevices[j].penalty;
-
+            sum_inroom += dailyDevices[j].inroom
+            count_inroom++;
           }
         }
 
         if(!has){
           data4[0].data.push( 0 )
           data4[1].data.push( 0 ) 
+          data4[2].data.push( 0 ) 
         }
         else{
           data4[0].data.push( sum_people )
           data4[1].data.push( sum_penalty ) 
+          data4[2].data.push( sum_inroom / count_inroom ) 
           // this.chart.update()
         }
 
       }
+      // data4[2].data = [11,22,33,44,55,66,77,88,99,100,111,121]
       // this.allowCanvasYearly = false;
       this.barChartData_a = data4 
       
@@ -572,11 +618,12 @@ public setAnnualData( ){
   }else{
 
     let data4 = [
-      { data: [ ], label: "count of People" },
+      { data: [ ], label: "The number of visitors" },
       {
         data: [ ],
         label: "count of Penalties"
-      }
+      },
+      { data: [ ], label: "Right now inside" }
     ];
     let labels = [];
 
@@ -592,22 +639,27 @@ public setAnnualData( ){
       labels.push(i.toString());
       let sum_people = 0;
       let sum_penalty = 0;
+      let sum_inroom = 0
+      let count_inroom = 0
 
       for(let j=0;j<this.sorted_dailyDevices.length;j++){
         if((new Date(this.sorted_dailyDevices[j].date)).getFullYear() == i){
           
-          sum_people += Math.floor((this.sorted_dailyDevices[j].in + this.sorted_dailyDevices[j].out)/2);
+          sum_people += this.sorted_dailyDevices[j].visitor;
           sum_penalty += this.sorted_dailyDevices[j].penalty;
-
+          sum_inroom += this.sorted_dailyDevices[j].inroom
+          count_inroom++
         }
       }
 
       data4[0].data.push( sum_people )
       data4[1].data.push( sum_penalty )
+      data4[2].data.push( sum_inroom / count_inroom )
       // this.chart.update()
     }
     // this.allowCanvasYearly = false;
 
+    // data4[2].data = [11,22,33,44,55,66,77,88,99,100,111,121]
     this.barChartLabels_a = labels
     this.barChartData_a = data4 
     
@@ -633,11 +685,12 @@ public setAnnualData( ){
 public setMonthData( sorted_devices ){
   let labels = []
   let data3 = [
-    { data: [], label: "count of People" },
+    { data: [], label: "The number of visitors" },
     {
       data: [],
       label: "count of Penalties"
-    }
+    },
+    { data: [ ], label: "Right now inside" }
   ];
   // this.barChartLabels_m
  // this.data3[0]
@@ -659,14 +712,16 @@ public setMonthData( sorted_devices ){
     for(let j=thisMonthDatas.length-1;j>=0 ; j--){
       if(!has && ((new Date(thisMonthDatas[j].date)).getDate() == i) ){
         has = true;
-        data3[0].data.push((thisMonthDatas[j].in + thisMonthDatas[j].out)/2)
+        data3[0].data.push(thisMonthDatas[j].visitor)
         data3[1].data.push(thisMonthDatas[j].penalty)
+        data3[2].data.push(thisMonthDatas[j].inroom)
         // this.chart.update()
       }
     }
     if(!has){
       data3[0].data.push( 0 )
       data3[1].data.push( 0 ) 
+      data3[2].data.push( 0 ) 
     }
 
   }
@@ -694,11 +749,12 @@ public setMonthData( sorted_devices ){
 public setWeekData(sorted_devices){
   let for_week_sorted_d = sorted_devices.filter(item => item.device_secret == this.thisSecretKey)
   let data2 = [
-    { data: [], label: "count of People" },
+    { data: [], label: "The number of visitors" },
     {
       data: [],
       label: "count of Penalties"
-    }
+    },
+    { data: [ ], label: "Right now inside" }
   ];
   // console.log(for_week_sorted_d);
   
@@ -710,14 +766,16 @@ public setWeekData(sorted_devices){
       if( !has && (this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == j ) && ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear()) ){
         has = true;
         
-        data2[0].data.push((for_week_sorted_d[i].in + for_week_sorted_d[i].out)/2)
+        data2[0].data.push(for_week_sorted_d[i].visitor)
         data2[1].data.push(for_week_sorted_d[i].penalty)
+        data2[2].data.push(for_week_sorted_d[i].inroom)
         // this.chart.update()
       }
     }
     if(!has){
       data2[0].data.push(0)
       data2[1].data.push(0) 
+      data2[2].data.push(0) 
     }
   }
   // for Sunday
@@ -726,14 +784,16 @@ public setWeekData(sorted_devices){
     //  this.barChartData_w[0].data
     if( !has && (this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == 0 )&& ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear())  ){
       has = true;
-      data2[0].data.push((for_week_sorted_d[i].in + for_week_sorted_d[i].out)/2)
+      data2[0].data.push(for_week_sorted_d[i].visitor)
       data2[1].data.push(for_week_sorted_d[i].penalty)
+      data2[2].data.push(for_week_sorted_d[i].inroom)
       // this.chart.update()
     }
   }
   if(!has){
     data2[0].data.push(0)
     data2[1].data.push(0)
+    data2[2].data.push(0)
   }
 
   // this.allowCanvasWeekly = false;

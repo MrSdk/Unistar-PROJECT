@@ -94,6 +94,8 @@ router.route('/create')
             in: request.body.in,
             out: request.body.out,
             penalty: request.body.penalty,
+            visitor: request.body.visitor,
+            inroom: request.body.inroom,
             status: request.body.status,
             date: new Date()
         })
@@ -117,6 +119,8 @@ router.route('/busWithGps/create')
             in: request.body.in,
             out: request.body.out,
             penalty: request.body.penalty,
+            visitor: request.body.visitor,
+            inroom: request.body.inroom,
             status: request.body.status,
             isBus: request.body.isBus,
             latitude: request.body.latitude,

@@ -6,6 +6,8 @@ let DeviceSchema = mongoose.Schema({
     in: { type: Number },
     out: { type: Number },
     penalty: { type: Number },
+    visitor: { type: Number },
+    inroom: { type: Number },
     status: { type: Number },
     date: { type: Date },
     isBus: { type: Boolean, default: false },

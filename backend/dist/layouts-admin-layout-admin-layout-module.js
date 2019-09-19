@@ -62687,7 +62687,7 @@ module.exports = "<div class=\"main-content\">\n    <div class=\"container-fluid
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"!allowToAll\">\n    <div class=\"main-content\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-sm-1\" style=\"margin: auto;margin-top: 20%\">\n\n                    <mat-spinner></mat-spinner>\n\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"main-content\">\n    <div class=\"container-fluid\">\n        <div *ngIf=\"allowToAll\" class=\"row\">\n            <div class=\"col-lg-10 col-md-10 col-sm-10\" style=\"margin: auto\">\n                <div class=\"row\" *ngIf=\"device_has(); else noDevice\">\n                    <mat-form-field>\n                        <mat-label>Check interval</mat-label>\n                        <mat-select [(value)]=\"checkedMinute\">\n                            <mat-option *ngFor=\"let checkMinute of checkMinutes\" (click)=\"checkedSelect()\" [value]=\"checkMinute\">\n                                {{ ( checkMinute\n                                <=60 )? (checkMinute + ' minut') : (checkMinute / 60 + ' hour') }} </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <div class=\"col-md-12\" style=\"margin: 5px\">\n\n                        <mat-card>\n\n                            <div *ngIf=\"allowCanvasDaily\">\n                                <h4> Daily</h4>\n\n                                <canvas baseChart #baseChart_d=\"base-chart\" [datasets]=\"(getDevice()).dayInfo\" [labels]=\"barChartLabels_d\" [options]=\"barChartOptions\" [legend]=\"barChartLegend\" [chartType]=\"barChartType\"></canvas>\n                            </div>\n                        </mat-card>\n                    </div>\n                    <div class=\"col-md-12\" style=\"margin: 5px\">\n                        <mat-card>\n\n                            <div *ngIf=\"allowCanvasWeekly\">\n                                <h4> Weekly</h4>\n\n                                <canvas baseChart #baseChart_w=\"base-chart\" [datasets]=\"barChartData_w\" [labels]=\"barChartLabels_w\" [options]=\"barChartOptions\" [legend]=\"barChartLegend\" [chartType]=\"barChartType\"></canvas>\n\n                            </div>\n                        </mat-card>\n                    </div>\n                    <mat-form-field>\n                        <mat-label>Check Year</mat-label>\n                        <mat-select [(value)]=\"checkedYearOfMonth\">\n                            <mat-option *ngFor=\"let checkYear of getFilteredYears()\" (click)=\"checkedMonths()\" [value]=\"checkYears.indexOf(checkYear)\">\n                                {{ checkYear }}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field style=\"margin-left: 10%;\">\n                        <mat-label>Check Month</mat-label>\n                        <mat-select [(value)]=\"checkedMonth\">\n                            <mat-option *ngFor=\"let checkMonth of checkMonths\" (click)=\"checkedMonths()\" [value]=\"checkMonths.indexOf(checkMonth)\">\n                                {{ checkMonth }}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <div class=\"col-md-12\" style=\"margin: 5px\">\n                        <mat-card>\n\n                            <div *ngIf=\"allowCanvasMonthly\">\n                                <h4> Monthly</h4>\n\n                                <canvas baseChart #baseChart_m=\"base-chart\" [datasets]=\"barChartData_m\" [labels]=\"barChartLabels_m\" [options]=\"barChartOptions\" [legend]=\"barChartLegend\" [chartType]=\"barChartType\" (chartHover)=\"chartHovered($event)\"></canvas>\n\n                                <!-- <a href=\"http://localhost:8080/api/download/monthly/{{thisSecretKey}}\" mat-raised-button color=\"primary\"> <i class=\"material-icons text-default\">cloud_download</i> <b> Download</b></a> -->\n                            </div>\n                        </mat-card>\n                    </div>\n                    <mat-form-field>\n                        <mat-label>Check Year</mat-label>\n                        <mat-select [(value)]=\"checkedYear\">\n                            <mat-option *ngFor=\"let checkYear of checkYears\" (click)=\"checkedYears()\" [value]=\"checkYears.indexOf(checkYear)\">\n                                {{ checkYear }}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <div class=\"col-md-12\" style=\"margin: 5px\">\n                        <mat-card>\n\n                            <div *ngIf=\"allowCanvasYearly\">\n                                <h4> Annual </h4>\n\n                                <canvas baseChart #baseChart_a=\"base-chart\" [datasets]=\"barChartData_a\" [labels]=\"barChartLabels_a\" [options]=\"barChartOptions\" [legend]=\"barChartLegend\" [chartType]=\"barChartType\" (chartHover)=\"chartHovered($event)\"></canvas>\n\n                                <!-- <button mat-raised-button (click)=\"change()\" color=\"primary\"> Change </button> -->\n                            </div>\n                        </mat-card>\n                    </div>\n\n                </div>\n\n            </div>\n            <div *ngIf=\"!device_has()\">\n                <ng-template #noDevice>\n\n                    <div class=\"alert alert-danger\">\n                        <button mat-button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n                                              <i class=\"material-icons\">close</i>\n                                          </button>\n                        <span>\n                                              <b> This device isn't exist </b> </span>\n                    </div>\n\n                </ng-template>\n\n            </div>\n            <section class=\"w-100 \" *ngIf=\"isDevice\">\n                <div class=\"w-50 \" style=\"margin:0 auto;\">\n                    <mat-card>\n                        <h3 style=\"font-family: Goudy Old Style;text-align: center\"><b>Receive data at any time interval</b></h3>\n                        <div class=\"row\">\n                            <div class=\"col-md-6\">\n                                <label for=\"from\">From </label>\n                                <mat-form-field>\n                                    <input #pick1 readonly id=\"from\" matInput [matDatepicker]=\"picker\" placeholder=\"Choose a date\">\n                                    <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n                                    <mat-datepicker #picker></mat-datepicker>\n                                </mat-form-field>\n\n                            </div>\n                            <div class=\"col-md-6\">\n                                <label for=\"to\">To </label>\n                                <mat-form-field>\n                                    <input #pick2 readonly id=\"to\" matInput [matDatepicker]=\"picker2\" placeholder=\"Choose a date\">\n                                    <mat-datepicker-toggle matSuffix [for]=\"picker2\"></mat-datepicker-toggle>\n                                    <mat-datepicker #picker2></mat-datepicker>\n                                </mat-form-field>\n                            </div>\n                            <div *ngIf=\"pick1.value && pick2.value\" style=\"margin: 10px\">\n\n                                <button (click)=\"getFullLink(pick1.value,pick2.value)\" mat-raised-button color=\"primary\"> <i class=\"material-icons text-default\">cloud_download </i> <b> Download</b></button>\n\n                            </div>\n                        </div>\n                    </mat-card>\n                </div>\n            </section>\n\n\n        </div>\n    </div>\n</div>"
+module.exports = "<div *ngIf=\"!allowToAll\">\n    <div class=\"main-content\">\n        <div class=\"container-fluid\">\n            <div class=\"row\">\n                <div class=\"col-sm-1\" style=\"margin: auto;margin-top: 20%\">\n\n                    <mat-spinner></mat-spinner>\n\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n<div class=\"main-content\">\n    <div class=\"container-fluid\">\n        <div *ngIf=\"allowToAll\" class=\"row\">\n            <div class=\"col-lg-10 col-md-10 col-sm-10\" style=\"margin: auto\">\n                <div class=\"row\" *ngIf=\"device_has(); else noDevice\">\n                    <div>\n\n                        <mat-form-field>\n                            <mat-label>Check Year</mat-label>\n                            <mat-select [(value)]=\"checkedYearOfDay\">\n                                <mat-option *ngFor=\"let checkYear of getFilteredYears()\" (click)=\"checkedMonthsOfDay()\" [value]=\"checkYears.indexOf(checkYear)\">\n                                    {{ checkYear }}\n                                </mat-option>\n                            </mat-select>\n                        </mat-form-field>\n                    </div>\n                    <div>\n                        <mat-form-field style=\"margin-left: 10%;\">\n                            <mat-label>Check Month</mat-label>\n                            <mat-select [(value)]=\"checkedMonthOfDay\">\n                                <mat-option *ngFor=\"let checkMonth of checkMonths\" (click)=\"checkedMonthsOfDay()\" [value]=\"checkMonths.indexOf(checkMonth)\">\n                                    {{ checkMonth }}\n                                </mat-option>\n                            </mat-select>\n                        </mat-form-field>\n\n                    </div>\n                    <div>\n                        <mat-form-field style=\"margin-left: 10%;\">\n                            <mat-label>Check Date</mat-label>\n                            <mat-select [(value)]=\"checkedDateOfDay\">\n                                <mat-option *ngFor=\"let checkDate of checkDates\" (click)=\"checkedMonthsOfDay()\" [value]=\"checkDates.indexOf(checkDate)\">\n                                    {{ checkDate }}\n                                </mat-option>\n                            </mat-select>\n                        </mat-form-field>\n\n                    </div>\n                    <div>\n                        <mat-form-field style=\"margin-left: 10%;\">\n                            <mat-label>Check interval</mat-label>\n                            <mat-select [(value)]=\"checkedMinute\">\n                                <mat-option *ngFor=\"let checkMinute of checkMinutes\" (click)=\"checkedSelect()\" [value]=\"checkMinute\">\n                                    {{ ( checkMinute\n                                    <=60 )? (checkMinute + ' minut') : (checkMinute / 60 + ' hour') }} </mat-option>\n                            </mat-select>\n                        </mat-form-field>\n\n                    </div>\n                    <div class=\"col-md-12\" style=\"margin: 5px\">\n\n                        <mat-card>\n\n                            <div *ngIf=\"allowCanvasDaily\">\n                                <h4> Daily</h4>\n\n                                <canvas baseChart #baseChart_d=\"base-chart\" [datasets]=\"(getDevice()).dayInfo\" [labels]=\"barChartLabels_d\" [options]=\"barChartOptions\" [legend]=\"barChartLegend\" [chartType]=\"barChartType\"></canvas>\n                            </div>\n                        </mat-card>\n                    </div>\n                    <div class=\"col-md-12\" style=\"margin: 5px\">\n                        <mat-card>\n\n                            <div *ngIf=\"allowCanvasWeekly\">\n                                <h4> Weekly</h4>\n\n                                <canvas baseChart #baseChart_w=\"base-chart\" [datasets]=\"barChartData_w\" [labels]=\"barChartLabels_w\" [options]=\"barChartOptions\" [legend]=\"barChartLegend\" [chartType]=\"barChartType\"></canvas>\n\n                            </div>\n                        </mat-card>\n                    </div>\n                    <mat-form-field>\n                        <mat-label>Check Year</mat-label>\n                        <mat-select [(value)]=\"checkedYearOfMonth\">\n                            <mat-option *ngFor=\"let checkYear of getFilteredYears()\" (click)=\"checkedMonths()\" [value]=\"checkYears.indexOf(checkYear)\">\n                                {{ checkYear }}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field style=\"margin-left: 10%;\">\n                        <mat-label>Check Month</mat-label>\n                        <mat-select [(value)]=\"checkedMonth\">\n                            <mat-option *ngFor=\"let checkMonth of checkMonths\" (click)=\"checkedMonths()\" [value]=\"checkMonths.indexOf(checkMonth)\">\n                                {{ checkMonth }}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <div class=\"col-md-12\" style=\"margin: 5px\">\n                        <mat-card>\n\n                            <div *ngIf=\"allowCanvasMonthly\">\n                                <h4> Monthly</h4>\n\n                                <canvas baseChart #baseChart_m=\"base-chart\" [datasets]=\"barChartData_m\" [labels]=\"barChartLabels_m\" [options]=\"barChartOptions\" [legend]=\"barChartLegend\" [chartType]=\"barChartType\" (chartHover)=\"chartHovered($event)\"></canvas>\n\n                                <!-- <a href=\"http://localhost:8080/api/download/monthly/{{thisSecretKey}}\" mat-raised-button color=\"primary\"> <i class=\"material-icons text-default\">cloud_download</i> <b> Download</b></a> -->\n                            </div>\n                        </mat-card>\n                    </div>\n                    <mat-form-field>\n                        <mat-label>Check Year</mat-label>\n                        <mat-select [(value)]=\"checkedYear\">\n                            <mat-option *ngFor=\"let checkYear of checkYears\" (click)=\"checkedYears()\" [value]=\"checkYears.indexOf(checkYear)\">\n                                {{ checkYear }}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <div class=\"col-md-12\" style=\"margin: 5px\">\n                        <mat-card>\n\n                            <div *ngIf=\"allowCanvasYearly\">\n                                <h4> Annual </h4>\n\n                                <canvas baseChart #baseChart_a=\"base-chart\" [datasets]=\"barChartData_a\" [labels]=\"barChartLabels_a\" [options]=\"barChartOptions\" [legend]=\"barChartLegend\" [chartType]=\"barChartType\" (chartHover)=\"chartHovered($event)\"></canvas>\n\n                                <!-- <button mat-raised-button (click)=\"change()\" color=\"primary\"> Change </button> -->\n                            </div>\n                        </mat-card>\n                    </div>\n\n                </div>\n\n            </div>\n            <div *ngIf=\"!device_has()\">\n                <ng-template #noDevice>\n\n                    <div class=\"alert alert-danger\">\n                        <button mat-button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n                                              <i class=\"material-icons\">close</i>\n                                          </button>\n                        <span>\n                                              <b> This device isn't exist </b> </span>\n                    </div>\n\n                </ng-template>\n\n            </div>\n            <section class=\"w-100 \" *ngIf=\"isDevice\">\n                <div class=\"w-50 \" style=\"margin:0 auto;\">\n                    <mat-card>\n                        <h3 style=\"font-family: Goudy Old Style;text-align: center\"><b>Receive data at any time interval</b></h3>\n                        <div class=\"row\">\n                            <div class=\"col-md-6\">\n                                <label for=\"from\">From </label>\n                                <mat-form-field>\n                                    <input #pick1 readonly id=\"from\" matInput [matDatepicker]=\"picker\" placeholder=\"Choose a date\">\n                                    <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n                                    <mat-datepicker #picker></mat-datepicker>\n                                </mat-form-field>\n\n                            </div>\n                            <div class=\"col-md-6\">\n                                <label for=\"to\">To </label>\n                                <mat-form-field>\n                                    <input #pick2 readonly id=\"to\" matInput [matDatepicker]=\"picker2\" placeholder=\"Choose a date\">\n                                    <mat-datepicker-toggle matSuffix [for]=\"picker2\"></mat-datepicker-toggle>\n                                    <mat-datepicker #picker2></mat-datepicker>\n                                </mat-form-field>\n                            </div>\n                            <div *ngIf=\"pick1.value && pick2.value\" style=\"margin: 10px\">\n\n                                <button (click)=\"getFullLink(pick1.value,pick2.value)\" mat-raised-button color=\"primary\"> <i class=\"material-icons text-default\">cloud_download </i> <b> Download</b></button>\n\n                            </div>\n                        </div>\n                    </mat-card>\n                </div>\n            </section>\n\n\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -63784,10 +63784,14 @@ var DeviceComponent = /** @class */ (function () {
             "November",
             "December"
         ];
-        this.checkedMinute = null;
+        this.checkedMinute = 720;
         this.checkedYear = 0;
         this.checkedMonth = (new Date()).getMonth();
         this.checkedYearOfMonth = 0;
+        this.checkedYearOfDay = 0;
+        this.checkedMonthOfDay = (new Date()).getMonth();
+        this.checkedDateOfDay = (new Date()).getDate();
+        this.checkDates = [];
         this.barChartOptions = {
             scaleShowVerticalLines: false,
             responsive: true
@@ -63820,29 +63824,33 @@ var DeviceComponent = /** @class */ (function () {
         this.barChartType = "line"; // bar // doughnut // line // pie
         this.barChartLegend = true;
         this.barChartData_d = [
-            { data: [], label: "count of People" },
-            { data: [], label: "count of Penalties" }
+            { data: [], label: "The number of visitors" },
+            { data: [], label: "count of Penalties" },
+            { data: [], label: "Right now inside" }
         ];
         this.barChartData_w = [
-            { data: [], label: "count of People" },
+            { data: [], label: "The number of visitors" },
             {
                 data: [],
                 label: "count of Penalties"
-            }
+            },
+            { data: [], label: "Right now inside" }
         ];
         this.barChartData_m = [
-            { data: [], label: "count of People" },
+            { data: [], label: "The number of visitors" },
             {
                 data: [],
                 label: "count of Penalties"
-            }
+            },
+            { data: [], label: "Right now inside" }
         ];
         this.barChartData_a = [
-            { data: [], label: "count of People" },
+            { data: [], label: "The number of visitors" },
             {
                 data: [],
                 label: "count of Penalties"
-            }
+            },
+            { data: [], label: "Right now inside" }
         ];
         this.valueOfOneChange = 0;
         this.getAllInformations();
@@ -63851,11 +63859,6 @@ var DeviceComponent = /** @class */ (function () {
             _this.allowToAll = true;
             // this.chart.getChartBuilder(this.chart.ctx);
         }, 600);
-        setTimeout(function () {
-            // this.chart.ngOnInit()
-            // this.chart.update()
-            //   this.chart.getChartBuilder(this.chart.ctx);
-        }, 8000);
     }
     DeviceComponent.prototype.ngOnInit = function () {
     };
@@ -63865,7 +63868,7 @@ var DeviceComponent = /** @class */ (function () {
     };
     DeviceComponent.prototype.getFullLink = function (date1, date2) {
         var text = this.thisSecretKey + "/" + (new Date(date1)).getTime() + "/" + (new Date(date2)).getTime();
-        window.location.href = 'http://localhost:8080/api/download/' + text;
+        window.location.href = '/api/download/' + text;
         return text;
     };
     DeviceComponent.prototype.getAllInformations = function () {
@@ -63932,6 +63935,10 @@ var DeviceComponent = /** @class */ (function () {
         }
         this.setAnnualData();
     };
+    DeviceComponent.prototype.checkedMonthsOfDay = function () {
+        this.setDateOfDay();
+        this.checkedSelect();
+    };
     DeviceComponent.prototype.checkedSelect = function () {
         var secret_key = this.thisSecretKey;
         var labels = [];
@@ -63970,7 +63977,7 @@ var DeviceComponent = /** @class */ (function () {
                 };
             }
             // For Annual
-            console.log(_this.thisSecretKey);
+            // console.log(this.thisSecretKey);
             var temporarySortedDevices = [];
             dailyDevices.forEach(function (item) {
                 if (item.device_secret == _this.thisSecretKey) {
@@ -63988,7 +63995,7 @@ var DeviceComponent = /** @class */ (function () {
             var dataYears = _this.checkYears;
             var years = [];
             if (_this.sorted_dailyDevices.length > 0) {
-                console.log("EEEEEEEEE");
+                // console.log("EEEEEEEEE");
                 for (var i = (new Date(_this.sorted_dailyDevices[0].date)).getFullYear(); i <= (new Date()).getFullYear(); i++) {
                     years.push(i.toString());
                 }
@@ -63996,8 +64003,9 @@ var DeviceComponent = /** @class */ (function () {
             years.push('All of them');
             _this.checkedYear = years.length - 2;
             _this.checkedYearOfMonth = years.length - 2;
+            _this.checkedYearOfDay = years.length - 2;
             _this.checkYears = years.slice();
-            console.log(_this.checkYears);
+            // console.log(this.checkYears);
             // this.checkedYearOfMonth = 
             setTimeout(function () {
                 if (_this.chart1 && _this.chart1.chart && _this.chart1.chart.config) {
@@ -64008,6 +64016,9 @@ var DeviceComponent = /** @class */ (function () {
             // setTimeout(()=>{
             // this.chart.getChartBuilder(this.chart.ctx)
             // },500)
+            // For Daily
+            _this.setDateOfDay();
+            _this.checkedSelect();
             // For Weekly
             _this.setWeekData(deevices);
             // For Monthly
@@ -64045,9 +64056,14 @@ var DeviceComponent = /** @class */ (function () {
     DeviceComponent.prototype.getDataOfDay = function (secret_key, deevices) {
         var _this = this;
         var thisDate = new Date();
+        thisDate.setFullYear(Number(this.checkYears[this.checkedYearOfDay]));
+        thisDate.setMonth(this.checkedMonthOfDay);
+        thisDate.setDate(this.checkedDateOfDay);
+        // thisDate.setFullYear(this.checkedYearOfDay)
         var barData = [
-            { data: [], label: "count of People" },
-            { data: [], label: "count of Penalties" }
+            { data: [], label: "The number of visitors" },
+            { data: [], label: "count of Penalties" },
+            { data: [], label: "Right now inside" }
         ];
         var thisDayDevices = deevices.filter(function (item) {
             var itemDate = new Date(item.date);
@@ -64060,6 +64076,7 @@ var DeviceComponent = /** @class */ (function () {
         });
         barData[0].data.push(0);
         barData[1].data.push(0);
+        barData[2].data.push(0);
         // for(let i=0;i<24*60;i+=this.checkedMinute){
         if (this.checkedMinute) {
             for (var i = 0; i < 24 * 60; i += this.checkedMinute) {
@@ -64071,14 +64088,16 @@ var DeviceComponent = /** @class */ (function () {
                         i + this.checkedMinute >
                             itemDate.getHours() * 60 + itemDate.getMinutes()) {
                         has = true;
-                        barData[0].data.push((thisDayDevices[j].in + thisDayDevices[j].out) / 2);
+                        barData[0].data.push(thisDayDevices[j].visitor);
                         barData[1].data.push(thisDayDevices[j].penalty);
+                        barData[2].data.push(thisDayDevices[j].inroom);
                         // this.chart.update() 
                     }
                 }
                 if (!has) {
                     barData[0].data.push(0);
                     barData[1].data.push(0);
+                    barData[2].data.push(0);
                 }
             }
         }
@@ -64091,8 +64110,9 @@ var DeviceComponent = /** @class */ (function () {
         var _this = this;
         var thisDate = new Date();
         var barData = [
-            { data: [], label: "count of People" },
-            { data: [], label: "count of Penalties" }
+            { data: [], label: "The number of visitors" },
+            { data: [], label: "count of Penalties" },
+            { data: [], label: "Right now inside" }
         ];
         // barData ni massivlarini 0 bilan toldirish
         // for(let i=0;i<=24*60;i+=this.checkedMinute){
@@ -64111,6 +64131,7 @@ var DeviceComponent = /** @class */ (function () {
         });
         barData[0].data.push(0);
         barData[1].data.push(0);
+        barData[2].data.push(0);
         for (var i = 0; i < 24 * 60; i += this.checkedMinute) {
             var has = false;
             for (var j = thisDayDevices.length - 1; j >= 0; j--) {
@@ -64122,13 +64143,22 @@ var DeviceComponent = /** @class */ (function () {
                     has = true;
                     barData[0].data.push(0);
                     barData[1].data.push(0);
+                    barData[2].data.push(0);
                 }
             }
             if (!has) {
                 barData[0].data.push(0);
                 barData[1].data.push(0);
+                barData[2].data.push(0);
             }
             return barData;
+        }
+    };
+    DeviceComponent.prototype.setDateOfDay = function () {
+        this.checkDates = [];
+        var fullDaysOfThisMonth = (new Date(new Date(this.checkYears[this.checkedYearOfDay]).getFullYear(), this.checkedMonthOfDay + 1, 0).getDate());
+        for (var i = 0; i <= fullDaysOfThisMonth; i++) {
+            this.checkDates.push(i.toString());
         }
     };
     DeviceComponent.prototype.setAnnualData = function () {
@@ -64137,33 +64167,41 @@ var DeviceComponent = /** @class */ (function () {
         var dailyDevices = this.sorted_dailyDevices;
         if (this.checkedYear != (this.checkYears.length - 1)) {
             var data4 = [
-                { data: [], label: "count of People" },
+                { data: [], label: "The number of visitors" },
                 {
                     data: [],
                     label: "count of Penalties"
-                }
+                },
+                { data: [], label: "Right now inside" }
             ];
             for (var i = 0; i < 12; i++) {
                 var has = false;
                 var sum_people = 0;
                 var sum_penalty = 0;
+                var sum_inroom = 0;
+                var count_inroom = 0;
                 for (var j = 0; j < dailyDevices.length; j++) {
                     if (((new Date(dailyDevices[j].date)).getFullYear() == new Date(this.checkYears[this.checkedYear]).getFullYear()) && ((new Date(dailyDevices[j].date)).getMonth() == i)) {
                         has = true;
-                        sum_people += Math.floor((dailyDevices[j].in + dailyDevices[j].out) / 2);
+                        sum_people += dailyDevices[j].visitor;
                         sum_penalty += dailyDevices[j].penalty;
+                        sum_inroom += dailyDevices[j].inroom;
+                        count_inroom++;
                     }
                 }
                 if (!has) {
                     data4[0].data.push(0);
                     data4[1].data.push(0);
+                    data4[2].data.push(0);
                 }
                 else {
                     data4[0].data.push(sum_people);
                     data4[1].data.push(sum_penalty);
+                    data4[2].data.push(sum_inroom / count_inroom);
                     // this.chart.update()
                 }
             }
+            // data4[2].data = [11,22,33,44,55,66,77,88,99,100,111,121]
             // this.allowCanvasYearly = false;
             this.barChartData_a = data4;
             setTimeout(function () {
@@ -64179,11 +64217,12 @@ var DeviceComponent = /** @class */ (function () {
         }
         else {
             var data4 = [
-                { data: [], label: "count of People" },
+                { data: [], label: "The number of visitors" },
                 {
                     data: [],
                     label: "count of Penalties"
-                }
+                },
+                { data: [], label: "Right now inside" }
             ];
             var labels = [];
             var minYear = new Date().getFullYear();
@@ -64196,17 +64235,23 @@ var DeviceComponent = /** @class */ (function () {
                 labels.push(i.toString());
                 var sum_people = 0;
                 var sum_penalty = 0;
+                var sum_inroom = 0;
+                var count_inroom = 0;
                 for (var j = 0; j < this.sorted_dailyDevices.length; j++) {
                     if ((new Date(this.sorted_dailyDevices[j].date)).getFullYear() == i) {
-                        sum_people += Math.floor((this.sorted_dailyDevices[j].in + this.sorted_dailyDevices[j].out) / 2);
+                        sum_people += this.sorted_dailyDevices[j].visitor;
                         sum_penalty += this.sorted_dailyDevices[j].penalty;
+                        sum_inroom += this.sorted_dailyDevices[j].inroom;
+                        count_inroom++;
                     }
                 }
                 data4[0].data.push(sum_people);
                 data4[1].data.push(sum_penalty);
+                data4[2].data.push(sum_inroom / count_inroom);
                 // this.chart.update()
             }
             // this.allowCanvasYearly = false;
+            // data4[2].data = [11,22,33,44,55,66,77,88,99,100,111,121]
             this.barChartLabels_a = labels;
             this.barChartData_a = data4;
             setTimeout(function () {
@@ -64225,11 +64270,12 @@ var DeviceComponent = /** @class */ (function () {
         var _this = this;
         var labels = [];
         var data3 = [
-            { data: [], label: "count of People" },
+            { data: [], label: "The number of visitors" },
             {
                 data: [],
                 label: "count of Penalties"
-            }
+            },
+            { data: [], label: "Right now inside" }
         ];
         // this.barChartLabels_m
         // this.data3[0]
@@ -64244,14 +64290,16 @@ var DeviceComponent = /** @class */ (function () {
             for (var j = thisMonthDatas.length - 1; j >= 0; j--) {
                 if (!has && ((new Date(thisMonthDatas[j].date)).getDate() == i)) {
                     has = true;
-                    data3[0].data.push((thisMonthDatas[j].in + thisMonthDatas[j].out) / 2);
+                    data3[0].data.push(thisMonthDatas[j].visitor);
                     data3[1].data.push(thisMonthDatas[j].penalty);
+                    data3[2].data.push(thisMonthDatas[j].inroom);
                     // this.chart.update()
                 }
             }
             if (!has) {
                 data3[0].data.push(0);
                 data3[1].data.push(0);
+                data3[2].data.push(0);
             }
         }
         // this.allowCanvasMonthly = false;
@@ -64272,11 +64320,12 @@ var DeviceComponent = /** @class */ (function () {
         var _this = this;
         var for_week_sorted_d = sorted_devices.filter(function (item) { return item.device_secret == _this.thisSecretKey; });
         var data2 = [
-            { data: [], label: "count of People" },
+            { data: [], label: "The number of visitors" },
             {
                 data: [],
                 label: "count of Penalties"
-            }
+            },
+            { data: [], label: "Right now inside" }
         ];
         // console.log(for_week_sorted_d);
         for (var j = 1; j <= 6; j++) {
@@ -64285,14 +64334,16 @@ var DeviceComponent = /** @class */ (function () {
                 //  this.barChartData_w[0].data
                 if (!has_1 && (this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == j) && ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear())) {
                     has_1 = true;
-                    data2[0].data.push((for_week_sorted_d[i].in + for_week_sorted_d[i].out) / 2);
+                    data2[0].data.push(for_week_sorted_d[i].visitor);
                     data2[1].data.push(for_week_sorted_d[i].penalty);
+                    data2[2].data.push(for_week_sorted_d[i].inroom);
                     // this.chart.update()
                 }
             }
             if (!has_1) {
                 data2[0].data.push(0);
                 data2[1].data.push(0);
+                data2[2].data.push(0);
             }
         }
         // for Sunday
@@ -64301,14 +64352,16 @@ var DeviceComponent = /** @class */ (function () {
             //  this.barChartData_w[0].data
             if (!has && (this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == 0) && ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear())) {
                 has = true;
-                data2[0].data.push((for_week_sorted_d[i].in + for_week_sorted_d[i].out) / 2);
+                data2[0].data.push(for_week_sorted_d[i].visitor);
                 data2[1].data.push(for_week_sorted_d[i].penalty);
+                data2[2].data.push(for_week_sorted_d[i].inroom);
                 // this.chart.update()
             }
         }
         if (!has) {
             data2[0].data.push(0);
             data2[1].data.push(0);
+            data2[2].data.push(0);
         }
         // this.allowCanvasWeekly = false;
         this.barChartData_w = data2;
