@@ -148,7 +148,7 @@
                 </ng-template>
 
             </div>
-            <section class="w-100 " *ngIf="isDevice">
+            <section class="w-100 " *ngIf="isDevice && !isAdmin">
                 <div class="w-50 " style="margin:0 auto;">
                     <mat-card>
                         <h3 style="font-family: Goudy Old Style;text-align: center"><b>Receive data at any time interval</b></h3>
@@ -179,7 +179,37 @@
                     </mat-card>
                 </div>
             </section>
+            <section class="w-100 " *ngIf="isDevice && isAdmin">
+                <div class="w-50 " style="margin:0 auto;">
+                    <mat-card>
+                        <h3 style="font-family: Goudy Old Style;text-align: center"><b>Receive data at any time interval for Admin</b></h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="from">From </label>
+                                <mat-form-field>
+                                    <input #pick1_admin readonly id="from_admin" matInput [matDatepicker]="picker_admin" placeholder="Choose a date">
+                                    <mat-datepicker-toggle matSuffix [for]="picker_admin"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker_admin></mat-datepicker>
+                                </mat-form-field>
 
+                            </div>
+                            <div class="col-md-6">
+                                <label for="to">To </label>
+                                <mat-form-field>
+                                    <input #pick2_admin readonly id="to_admin" matInput [matDatepicker]="picker2_admin" placeholder="Choose a date">
+                                    <mat-datepicker-toggle matSuffix [for]="picker2_admin"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2_admin></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="pick1_admin.value && pick2_admin.value" style="margin: 10px">
+
+                                <button (click)="getFullLinkForAdmin(pick1_admin.value,pick2_admin.value)" mat-raised-button color="primary"> <i class="material-icons text-default">cloud_download </i> <b> Download</b></button>
+
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </section>
 
         </div>
     </div>

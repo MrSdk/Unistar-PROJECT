@@ -47,6 +47,49 @@ router.route('/:device_secret/:date1/:date2')
         })
 
     })
+router.route('/admin/:device_secret/:date1/:date2')
+    .get(async(req, res) => {
+
+        let secret = req.params.device_secret;
+        let date1 = new Date(parseInt(req.params.date1));
+        let date2 = new Date(parseInt(req.params.date2));
+        date2.setHours("23")
+        date2.setMinutes("59")
+
+
+        let data = ""
+        let thisDate = new Date()
+        let originalfileName = `./backend/public/${secret}1.csv`;
+        let fileName = `${secret} ${date1.getMonth() + 1}:${date1.getDate()}:${date1.getFullYear()}-${date2.getMonth() + 1}:${date2.getDate()}:${date2.getFullYear()}.csv`;
+
+        let devices = await Device.find()
+        let sortedDevices = [];
+
+        devices.forEach((element) => {
+            if (secret == element.device_secret && ((new Date(element.date)).getTime() >= (new Date(date1)).getTime()) && ((new Date(element.date)).getTime() <= (new Date(date2)).getTime())) {
+                sortedDevices.push(element)
+            }
+        })
+
+        data += "time,in,out,penalty,visitor,inroom,real_distance_1,real_distance_2,start_distance_1,start_distance_2,date\n"
+
+        sortedDevices.forEach(item => {
+            data += `${item.time},${item.in},${item.out},${item.penalty},${item.visitor},${item.inroom},${item.real_distance_1 ? item.real_distance_1 : '' },${item.real_distance_2 ? item.real_distance_2 : '' },${item.start_distance_1 ? item.start_distance_1 : '' },${item.start_distance_2 ? item.start_distance_2 : '' },${item.date}\n`
+        })
+
+        fs.appendFile(originalfileName, data, {}, () => {
+            // console.log(data);
+
+            res.download(originalfileName, fileName)
+
+            setTimeout(() => {
+                console.log("DELETED !");
+                fs.unlink(originalfileName, () => {})
+            }, 1000)
+
+        })
+
+    })
 
 router.route('/daily/:device_secret')
     .get(async(req, res) => {

@@ -13,7 +13,11 @@ let DeviceSchema = mongoose.Schema({
     isBus: { type: Boolean, default: false },
     latitude: { type: String },
     longitude: { type: String },
-    altitude: { type: String }
+    altitude: { type: String },
+    real_distance_1: { type: Number },
+    real_distance_2: { type: Number },
+    start_distance_1: { type: Number },
+    start_distance_2: { type: Number }
 })
 
 module.exports = mongoose.model('device', DeviceSchema)

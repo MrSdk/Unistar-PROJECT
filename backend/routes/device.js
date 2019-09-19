@@ -97,6 +97,10 @@ router.route('/create')
             visitor: request.body.visitor,
             inroom: request.body.inroom,
             status: request.body.status,
+            real_distance_1: request.body.real_distance_1,
+            real_distance_2: request.body.real_distance_2,
+            start_distance_1: request.body.start_distance_1,
+            start_distance_2: request.body.start_distance_2,
             date: new Date()
         })
 
@@ -126,6 +130,10 @@ router.route('/busWithGps/create')
             latitude: request.body.latitude,
             longitude: request.body.longitude,
             altitude: request.body.altitude,
+            real_distance_1: request.body.real_distance_1,
+            real_distance_2: request.body.real_distance_2,
+            start_distance_1: request.body.start_distance_1,
+            start_distance_2: request.body.start_distance_2,
             date: new Date()
         })
 

@@ -45,6 +45,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
   } 
  
   public users;
+  public isAdmin = false;
   public isDevice = false;
  
   private thisSecretKey ;
@@ -173,6 +174,17 @@ export class DeviceComponent implements OnInit , OnDestroy {
     return text;
     
   }
+  
+  getFullLinkForAdmin(date1,date2){
+    
+    let text = this.thisSecretKey + "/" + (new Date(date1)).getTime() + "/" + (new Date(date2)).getTime()
+
+    window.location.href = '/api/download/admin/' + text;
+ 
+    
+    return text;
+    
+  }
 
   getAllInformations(){
         this.verifyDevice()
@@ -184,6 +196,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
     this.subscription1 =  this.authSvc.thisUser().subscribe((result: any)=>{
       let res = result.result;
       if(res.isAdmin){
+        this.isAdmin = true;
         // this.getAllInformations()
       }else{
         if(!res.user.devices.find(element => element.device_secret == this.route.snapshot.params.secret)){
