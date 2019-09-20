@@ -12,7 +12,8 @@ router.route('/test')
         response.status(200).json({ message: "Hello" })
     })
     .post((request, response) => {
-        console.log("_______________________________________U-R-AAA_____________________________________");
+        console.log("____________________________________________________________U-R-AAA_____________________________________");
+        console.log(request.body);
 
         response.status(200).json(request.body)
     });
