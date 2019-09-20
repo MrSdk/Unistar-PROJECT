@@ -18,6 +18,20 @@ router.route('/test')
         response.status(200).json(request.body)
     });
 
+router.route('/test2')
+    .post((request, response) => {
+        let queryParametres = request.query;
+        console.log(queryParametres);
+
+        response.json(queryParametres)
+    })
+    .get((request, response) => {
+        let queryParametres = request.query;
+        console.log(queryParametres);
+
+        response.json(queryParametres)
+    });
+
 router.route('/verify/:secret')
     .get(async(request, response) => {
         let d_secret = request.params.secret;
