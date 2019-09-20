@@ -603,7 +603,7 @@ public setAnnualData( ){
         else{
           data4[0].data.push( sum_people )
           data4[1].data.push( sum_penalty ) 
-          data4[2].data.push( sum_inroom / count_inroom ) 
+          data4[2].data.push( Math.floor(sum_inroom / count_inroom ) ) 
           // this.chart.update()
         }
 
