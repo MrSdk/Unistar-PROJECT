@@ -64088,6 +64088,8 @@ var DeviceComponent = /** @class */ (function () {
         if (this.checkedMinute) {
             for (var i = 0; i < 24 * 60; i += this.checkedMinute) {
                 var has = false;
+                var inrooms = 0;
+                var countInrooms = 0;
                 for (var j = thisDayDevices.length - 1; j >= 0; j--) {
                     var itemDate = new Date(thisDayDevices[j].date);
                     if (!has &&
@@ -64097,14 +64099,23 @@ var DeviceComponent = /** @class */ (function () {
                         has = true;
                         barData[0].data.push(thisDayDevices[j].visitor);
                         barData[1].data.push(thisDayDevices[j].penalty);
-                        barData[2].data.push(thisDayDevices[j].inroom);
+                        // barData[2].data.push(thisDayDevices[j].inroom);
                         // this.chart.update() 
+                    }
+                    // for inroom middle
+                    if (i <= itemDate.getHours() * 60 + itemDate.getMinutes() && i + this.checkedMinute >
+                        itemDate.getHours() * 60 + itemDate.getMinutes()) {
+                        inrooms += thisDayDevices[j].inroom;
+                        countInrooms++;
                     }
                 }
                 if (!has) {
                     barData[0].data.push(0);
                     barData[1].data.push(0);
                     barData[2].data.push(0);
+                }
+                else {
+                    barData[2].data.push(Math.floor(inrooms / countInrooms));
                 }
             }
         }
@@ -64170,8 +64181,10 @@ var DeviceComponent = /** @class */ (function () {
     };
     DeviceComponent.prototype.setAnnualData = function () {
         // this.barChartData_a
+        // devices  
         var _this = this;
-        var dailyDevices = this.sorted_dailyDevices;
+        var dailyDevices = this.devices;
+        var sortedDailyDevices = this.sorted_dailyDevices;
         if (this.checkedYear != (this.checkYears.length - 1)) {
             var data4 = [
                 { data: [], label: "The number of visitors" },
@@ -64185,15 +64198,23 @@ var DeviceComponent = /** @class */ (function () {
                 var has = false;
                 var sum_people = 0;
                 var sum_penalty = 0;
+                var count_penalty = 0;
                 var sum_inroom = 0;
                 var count_inroom = 0;
                 for (var j = 0; j < dailyDevices.length; j++) {
-                    if (((new Date(dailyDevices[j].date)).getFullYear() == new Date(this.checkYears[this.checkedYear]).getFullYear()) && ((new Date(dailyDevices[j].date)).getMonth() == i)) {
+                    if ((this.thisSecretKey == dailyDevices[j].device_secret) && ((new Date(dailyDevices[j].date)).getFullYear() == new Date(this.checkYears[this.checkedYear]).getFullYear()) && ((new Date(dailyDevices[j].date)).getMonth() == i)) {
                         has = true;
-                        sum_people += dailyDevices[j].visitor;
-                        sum_penalty += dailyDevices[j].penalty;
+                        // sum_people += dailyDevices[j].visitor;
+                        // sum_penalty += dailyDevices[j].penalty;
                         sum_inroom += dailyDevices[j].inroom;
                         count_inroom++;
+                    }
+                }
+                for (var j = 0; j < sortedDailyDevices.length; j++) {
+                    if ((this.thisSecretKey == sortedDailyDevices[j].device_secret) && ((new Date(sortedDailyDevices[j].date)).getFullYear() == new Date(this.checkYears[this.checkedYear]).getFullYear()) && ((new Date(sortedDailyDevices[j].date)).getMonth() == i)) {
+                        sum_people += sortedDailyDevices[j].visitor;
+                        sum_penalty += sortedDailyDevices[j].penalty;
+                        count_penalty++;
                     }
                 }
                 if (!has) {
@@ -64202,8 +64223,8 @@ var DeviceComponent = /** @class */ (function () {
                     data4[2].data.push(0);
                 }
                 else {
-                    data4[0].data.push(sum_people);
-                    data4[1].data.push(sum_penalty);
+                    data4[0].data.push(Math.floor(sum_people / count_penalty));
+                    data4[1].data.push(Math.floor(sum_penalty / count_penalty));
                     data4[2].data.push(Math.floor(sum_inroom / count_inroom));
                     // this.chart.update()
                 }
@@ -64242,19 +64263,28 @@ var DeviceComponent = /** @class */ (function () {
                 labels.push(i.toString());
                 var sum_people = 0;
                 var sum_penalty = 0;
+                var count_penalty = 0;
                 var sum_inroom = 0;
                 var count_inroom = 0;
-                for (var j = 0; j < this.sorted_dailyDevices.length; j++) {
-                    if ((new Date(this.sorted_dailyDevices[j].date)).getFullYear() == i) {
-                        sum_people += this.sorted_dailyDevices[j].visitor;
-                        sum_penalty += this.sorted_dailyDevices[j].penalty;
-                        sum_inroom += this.sorted_dailyDevices[j].inroom;
+                for (var j = 0; j < dailyDevices.length; j++) {
+                    if ((this.thisSecretKey == dailyDevices[j].device_secret) && (new Date(dailyDevices[j].date)).getFullYear() == i) {
+                        // has = true;
+                        // sum_people += dailyDevices[j].visitor;
+                        // sum_penalty += dailyDevices[j].penalty;
+                        sum_inroom += dailyDevices[j].inroom;
                         count_inroom++;
                     }
                 }
-                data4[0].data.push(sum_people);
-                data4[1].data.push(sum_penalty);
-                data4[2].data.push(sum_inroom / count_inroom);
+                for (var j = 0; j < sortedDailyDevices.length; j++) {
+                    if ((new Date(sortedDailyDevices[j].date)).getFullYear() == i) {
+                        sum_people += sortedDailyDevices[j].visitor;
+                        sum_penalty += sortedDailyDevices[j].penalty;
+                        count_penalty++;
+                    }
+                }
+                data4[0].data.push(Math.floor(sum_people / count_penalty));
+                data4[1].data.push(Math.floor(sum_penalty / count_penalty));
+                data4[2].data.push(Math.floor(sum_inroom / count_inroom));
                 // this.chart.update()
             }
             // this.allowCanvasYearly = false;
@@ -64294,19 +64324,28 @@ var DeviceComponent = /** @class */ (function () {
         // console.log(sorted_devices.filter(item => (item.device_secret == this.thisSecretKey)));
         for (var i = 0; i <= fullDaysOfThisMonth; i++) {
             var has = false;
+            var inrooms = 0;
+            var countInrooms = 0;
             for (var j = thisMonthDatas.length - 1; j >= 0; j--) {
                 if (!has && ((new Date(thisMonthDatas[j].date)).getDate() == i)) {
                     has = true;
                     data3[0].data.push(thisMonthDatas[j].visitor);
                     data3[1].data.push(thisMonthDatas[j].penalty);
-                    data3[2].data.push(thisMonthDatas[j].inroom);
+                    // data3[2].data.push(thisMonthDatas[j].inroom)
                     // this.chart.update()
+                }
+                if (((new Date(thisMonthDatas[j].date)).getDate() == i)) {
+                    inrooms += thisMonthDatas[j].inroom;
+                    countInrooms++;
                 }
             }
             if (!has) {
                 data3[0].data.push(0);
                 data3[1].data.push(0);
                 data3[2].data.push(0);
+            }
+            else {
+                data3[2].data.push(Math.floor(inrooms / countInrooms));
             }
         }
         // this.allowCanvasMonthly = false;
@@ -64337,14 +64376,21 @@ var DeviceComponent = /** @class */ (function () {
         // console.log(for_week_sorted_d);
         for (var j = 1; j <= 6; j++) {
             var has_1 = false;
+            var inrooms_1 = 0;
+            var countInroom_1 = 0;
             for (var i = for_week_sorted_d.length - 1; i >= 0; i--) {
                 //  this.barChartData_w[0].data
                 if (!has_1 && (this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == j) && ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear())) {
                     has_1 = true;
                     data2[0].data.push(for_week_sorted_d[i].visitor);
                     data2[1].data.push(for_week_sorted_d[i].penalty);
-                    data2[2].data.push(for_week_sorted_d[i].inroom);
+                    // data2[2].data.push(for_week_sorted_d[i].inroom)
                     // this.chart.update()
+                }
+                // for inrooms middle
+                if ((this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == j) && ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear())) {
+                    inrooms_1 += for_week_sorted_d[i].inroom;
+                    countInroom_1++;
                 }
             }
             if (!has_1) {
@@ -64352,23 +64398,36 @@ var DeviceComponent = /** @class */ (function () {
                 data2[1].data.push(0);
                 data2[2].data.push(0);
             }
+            else {
+                data2[2].data.push(Math.floor(inrooms_1 / countInroom_1));
+            }
         }
         // for Sunday
         var has = false;
+        var inrooms = 0;
+        var countInroom = 0;
         for (var i = for_week_sorted_d.length - 1; i >= 0; i--) {
             //  this.barChartData_w[0].data
             if (!has && (this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == 0) && ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear())) {
                 has = true;
                 data2[0].data.push(for_week_sorted_d[i].visitor);
                 data2[1].data.push(for_week_sorted_d[i].penalty);
-                data2[2].data.push(for_week_sorted_d[i].inroom);
+                // data2[2].data.push(for_week_sorted_d[i].inroom)
                 // this.chart.update()
+            }
+            // for inrooms middle
+            if ((this.getWeekNumber(new Date()) == this.getWeekNumber(new Date(for_week_sorted_d[i].date))) && ((new Date(for_week_sorted_d[i].date)).getDay() == 0) && ((new Date(for_week_sorted_d[i].date)).getFullYear() == (new Date()).getFullYear())) {
+                inrooms += for_week_sorted_d[i].inroom;
+                countInroom++;
             }
         }
         if (!has) {
             data2[0].data.push(0);
             data2[1].data.push(0);
             data2[2].data.push(0);
+        }
+        else {
+            data2[2].data.push(Math.floor(inrooms / countInroom));
         }
         // this.allowCanvasWeekly = false;
         this.barChartData_w = data2;

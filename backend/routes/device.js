@@ -5,6 +5,69 @@ const Device = require("./../model/device")
 const User = require("./../model/user")
 const CheckAuth = require("./../middleware/check-auth")
 
+router.route('/add')
+    .post((request, response) => {
+
+        let queryParametres = request.query;
+        let thisDevice = {};
+        if (queryParametres.t) {
+            thisDevice.time = queryParametres.t;
+        }
+        if (queryParametres.id) {
+            thisDevice.device_secret = queryParametres.id;
+        }
+        if (queryParametres.i) {
+            thisDevice.in = queryParametres.i;
+        }
+        if (queryParametres.o) {
+            thisDevice.out = queryParametres.o;
+        }
+        if (queryParametres.p) {
+            thisDevice.penalty = queryParametres.p;
+        }
+        if (queryParametres.v) {
+            thisDevice.visitor = queryParametres.v;
+        }
+        if (queryParametres.ir) {
+            thisDevice.inroom = queryParametres.ir;
+        }
+        thisDevice.date = new Date()
+
+        let newDevice = new Device(thisDevice)
+
+        newDevice.save().then(result => {
+            response.status(200).json(result)
+
+        }).catch(e => {
+            console.log(e);
+            response.status(400).json({ e })
+        })
+
+        // let newDevice = new Device({
+        //     time: request.body.time,
+        //     device_secret: request.body.device_secret,
+        //     in: request.body.in,
+        //     out: request.body.out,
+        //     penalty: request.body.penalty,
+        //     visitor: request.body.visitor,
+        //     inroom: request.body.inroom,
+        //     status: request.body.status,
+        //     real_distance_1: request.body.real_distance_1,
+        //     real_distance_2: request.body.real_distance_2,
+        //     start_distance_1: request.body.start_distance_1,
+        //     start_distance_2: request.body.start_distance_2,
+        //     date: new Date()
+        // })
+
+        // newDevice.save().then(result => {
+        //     response.status(200).json(result)
+
+        // }).catch(e => {
+        //     console.log(e);
+        //     response.status(400).json({ e })
+        // })
+    });
+
 router.route('/test')
     .get((request, response) => {
 
