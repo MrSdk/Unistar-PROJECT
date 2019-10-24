@@ -264,7 +264,8 @@ export class DeviceComponent implements OnInit , OnDestroy {
     this.setAnnualData()
   }
 
-  checkedMonthsOfDay(){ 
+  checkedMonthsOfDay(a,b){ 
+    
     this.setDateOfDay()
     this.checkedSelect()
   }
@@ -327,6 +328,7 @@ export class DeviceComponent implements OnInit , OnDestroy {
     let temporarySortedDevices = []
     dailyDevices.forEach((item) => {
         if( item.device_secret == this.thisSecretKey ){
+          
           temporarySortedDevices.push(item)
         }
     }) 
@@ -342,12 +344,22 @@ export class DeviceComponent implements OnInit , OnDestroy {
 
       let dataYears = this.checkYears;
       let years = [];
+      let secondlySortedYears = []
+      let secondlySortedYears2 = []
+
+      for(let i=0;i<this.sorted_dailyDevices.length;i++){
+        if( (secondlySortedYears.filter(item => (new Date(item)).getFullYear() == (new Date(this.sorted_dailyDevices[i].date)).getFullYear() )).length == 0 ){
+          secondlySortedYears.push(this.sorted_dailyDevices[i].date)
+          secondlySortedYears2.push((new Date(this.sorted_dailyDevices[i].date).getFullYear()))
+        }
+      }
       
-      if(this.sorted_dailyDevices.length > 0){
-        // console.log("EEEEEEEEE");
+      secondlySortedYears2 = secondlySortedYears2.sort();
+      
+      if(secondlySortedYears2.length > 0){ 
         
-        for(let i=(new Date(this.sorted_dailyDevices[0].date)).getFullYear();i<=(new Date()).getFullYear();i++){
-          years.push(i.toString())
+        for(let i=0;i<secondlySortedYears2.length;i++){
+          years.push(secondlySortedYears2[i].toString())
         }  
       }
       years.push('All of them')
@@ -425,11 +437,8 @@ export class DeviceComponent implements OnInit , OnDestroy {
 
     thisDate.setFullYear(Number(this.checkYears[this.checkedYearOfDay]))
     thisDate.setMonth(this.checkedMonthOfDay)
-    thisDate.setDate(this.checkedDateOfDay); 
-    
-    // thisDate.setFullYear(this.checkedYearOfDay)
-
-
+    thisDate.setDate(this.checkedDateOfDay);  
+       
     let barData = [
       { data: [], label: "The number of visitors" },
       { data: [], label: "count of Penalties" },
@@ -444,7 +453,8 @@ export class DeviceComponent implements OnInit , OnDestroy {
         (itemDate.getDate() == thisDate.getDate() &&
           itemDate.getMonth() == thisDate.getMonth() &&
           itemDate.getFullYear() == thisDate.getFullYear())
-      ) {
+      ) {  
+        
         return item;
       }
     });
@@ -608,7 +618,7 @@ public setAnnualData( ){
             has = true;
             // sum_people += dailyDevices[j].visitor;
             // sum_penalty += dailyDevices[j].penalty;
-            sum_inroom += dailyDevices[j].inroom
+            sum_inroom += dailyDevices[j].inroom ? dailyDevices[j].inroom : 0
             count_inroom++;
           }
         }
@@ -626,7 +636,7 @@ public setAnnualData( ){
           data4[1].data.push( 0 ) 
           data4[2].data.push( 0 ) 
         }
-        else{ 
+        else{   
 
           data4[0].data.push( Math.floor(sum_people / count_penalty) )
           data4[1].data.push( Math.floor(sum_penalty / count_penalty) ) 
@@ -688,7 +698,7 @@ public setAnnualData( ){
           // has = true;
             // sum_people += dailyDevices[j].visitor;
             // sum_penalty += dailyDevices[j].penalty;
-            sum_inroom += dailyDevices[j].inroom
+            sum_inroom += dailyDevices[j].inroom ? dailyDevices[j].inroom : 0
             count_inroom++;
         }
       }

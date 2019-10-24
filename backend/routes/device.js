@@ -5,11 +5,16 @@ const Device = require("./../model/device")
 const User = require("./../model/user")
 const CheckAuth = require("./../middleware/check-auth")
 
+// America hosti uchun
+let isAmericanHost = true
+
 router.route('/add')
     .post((request, response) => {
 
         let queryParametres = request.query;
         let thisDevice = {};
+        let currentDate = new Date()
+
         if (queryParametres.t) {
             thisDevice.time = queryParametres.t;
         }
@@ -31,7 +36,14 @@ router.route('/add')
         if (queryParametres.ir) {
             thisDevice.inroom = queryParametres.ir;
         }
-        thisDevice.date = new Date()
+        if (queryParametres.h) {
+            currentDate.setHours(queryParametres.h)
+        }
+        if (queryParametres.m) {
+            currentDate.setMinutes(queryParametres.m)
+        }
+
+        thisDevice.date = currentDate;
 
         let newDevice = new Device(thisDevice)
 
@@ -131,11 +143,19 @@ router.route('/verify/:secret')
 router.route('/')
     .get((request, response) => {
         Device.find().then((result) => {
+
+
             let allDevices = [];
             // for Annual
             let dailyDevices = [];
 
             for (let i = 0; i < result.length; i++) {
+
+                // America sayti uchun 5 ni ayiramiz
+                if (isAmericanHost) {
+                    result[i].date.setHours(result[i].date.getHours() - 5)
+                }
+
                 let has = false
                 for (let j = i + 1; j < result.length; j++) {
                     if (result[i].device_secret == result[j].device_secret) {
@@ -148,6 +168,8 @@ router.route('/')
             }
             // for Annual
             for (let i = 0; i < result.length; i++) {
+
+
                 let has = false
                 for (let j = i + 1; j < result.length; j++) {
                     if ((result[i].device_secret == result[j].device_secret) && ((new Date(result[i].date)).getDate() == (new Date(result[j].date)).getDate()) && ((new Date(result[i].date)).getMonth() == (new Date(result[j].date)).getMonth()) && ((new Date(result[i].date)).getFullYear() == (new Date(result[j].date)).getFullYear())) {
@@ -256,8 +278,15 @@ router.route('/gpsOfToday/:id')
         let today = new Date()
         if (user) {
             Device.find().then((devices) => {
+
                 user.devices.forEach((userDevice) => {
                     devices.forEach((deevice) => {
+
+                        // America sayti uchun 5 ni ayiramiz
+                        if (isAmericanHost) {
+                            deevice.date.setHours(deevice.date.getHours() - 5)
+                        }
+
                         if (deevice.device_secret == userDevice.device_secret) {
 
                             if (deevice.isBus && ((new Date(deevice.date)).getFullYear() == today.getFullYear()) && ((new Date(deevice.date)).getMonth() == today.getMonth()) && ((new Date(deevice.date)).getDate() == today.getDate())) {
@@ -275,5 +304,17 @@ router.route('/gpsOfToday/:id')
         }
 
     });
+
+router.route('/remove/:secret_key')
+    .delete((request, response) => {
+        let device_secret = request.params.secret_key
+        Device.remove({ device_secret: device_secret }).then((res) => {
+            response.status(200).json(res)
+        }).catch(e => {
+            console.log(e);
+            response.status(200).json()
+        })
+
+    })
 
 module.exports = router

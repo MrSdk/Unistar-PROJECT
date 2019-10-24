@@ -42,9 +42,12 @@
                         <mat-form-field style="margin-left: 10%;">
                             <mat-label>Check Date</mat-label>
                             <mat-select [(value)]="checkedDateOfDay">
-                                <mat-option *ngFor="let checkDate of checkDates" (click)="checkedMonthsOfDay()" [value]="checkDates.indexOf(checkDate)">
-                                    {{ checkDate }}
-                                </mat-option>
+                                <div *ngFor="let checkDate of checkDates">
+                                    <mat-option *ngIf="checkDate != 0" (click)="checkedMonthsOfDay(checkDates.indexOf(checkDate),checkDate)" [value]="checkDates.indexOf(checkDate)">
+                                        {{ checkDate }}
+                                    </mat-option>
+                                </div>
+
                             </mat-select>
                         </mat-form-field>
 

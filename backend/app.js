@@ -55,13 +55,13 @@ Date.prototype.getWeek = function() {
 
 // 140
 // console.log(Math.floor(40 / 60));
-// console.log(140 % 60);   
-// let a = new Date()
-// a.setFullYear(2020)
-// a.setMonth(9)
-// a.setDate(5)
-
-// console.log(a);
+// console.log(140 % 60); 
+// let date = new Date("2019-10-02T15:42:23.547Z")
+// console.log(date);
+// date.setHours(date.getHours() - 5)
+// console.log(date);
+// console.log(date.getHours());
+// console.log(date.getDate());
 
 
 app.get('/*', (req, res) => {
